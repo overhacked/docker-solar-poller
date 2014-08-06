@@ -17,12 +17,15 @@ First you need to setup your zones. Run the container with:
 
 docker run -t -i unixtastic/bind-dnssec-slave /bin/bash
 
-Edit /etc/named.conf to contain your TSIG key(s), your master server(s), and your zone(s).
+Edit /etc/named.conf to contain your TSIG key name(s) and value(s), your master server(s), and your zone(s).
 The comments in the file should be helpful.
 
-Exit and commit your changes:
+Check your config with: named-checkconf /etc/named.conf
 
-docker commit -a 'Your Name' <container ID from docker ps -l> YourName/DNS_slave_with_zones:v1
+Take a note of the container ID from the shell prompt, exit, and 
+commit your changes:
+
+docker commit -a 'Your Name' --run='{"Cmd": ["/sbin/my_init"]}' <container ID> YourName/DNS_slave_with_zones:v1
 
 Run your adjusted container:
 

@@ -21,7 +21,6 @@ RUN make
 RUN groupadd bind && useradd -g bind -d /tmp -M -r -s /bin/false bind
 RUN make install
 ADD named.conf /etc/named.conf
-RUN mkdir /var/tmp/bind && chown bind:bind /var/tmp/bind
 RUN mkdir /var/log/bind && chown bind:bind /var/log/bind
 RUN mkdir -p /var/named/zones/slave && chown bind:bind /var/named/zones/slave
 RUN rndc-confgen >/etc/rndc.conf
