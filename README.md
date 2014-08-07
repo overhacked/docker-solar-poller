@@ -6,7 +6,7 @@ A minimal BIND based DNS slave for docker.
 Build instructions:
 ===================
 
-git pull https://github.com/unixtastic/bind-DNSSEC-slave
+git clone https://github.com/unixtastic/bind-DNSSEC-slave
 
 docker build -t 'unixtastic/bind-dnssec-slave:v1.0' .
 
