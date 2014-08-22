@@ -8,7 +8,7 @@ Build instructions:
 
 git clone https://github.com/unixtastic/bind-DNSSEC-slave
 
-docker build -t 'unixtastic/bind-dnssec-slave:v1.0' .
+docker build -t 'unixtastic/bind-dnssec-slave:v3' .
 
 Usage instructions:
 ===================
@@ -25,11 +25,11 @@ Check your config with: named-checkconf /etc/named.conf
 Take a note of the container ID from the shell prompt, exit, and 
 commit your changes:
 
-docker commit -a 'Your Name' --run='{"Cmd": ["/sbin/my_init"]}' <container ID> YourName/DNS_slave_with_zones:v1
+docker commit -a 'Your Name' --run='{"Cmd": ["/sbin/my_init"]}' <container ID> YourName/DNS_slave_with_zones:v3
 
 Run your adjusted container:
 
-docker run -d -p 53:53/udp -p 53:53 YourName/DNS_slave_with_zones:v1
+docker run -d -p 53:53/udp -p 53:53 YourName/DNS_slave_with_zones:v3
 
 Test each of your zones with dig, i.e.:
 
