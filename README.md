@@ -6,9 +6,12 @@ A minimal BIND based DNS slave for docker.
 Build instructions:
 ===================
 
+These instructions are to rebuild this image. Normally you would just follow
+the usage instuctions below to run the image built by docker hub.
+
 git clone https://github.com/unixtastic/bind-DNSSEC-slave
 
-docker build -t 'unixtastic/bind-dnssec-slave:v3' .
+docker build -t 'unixtastic/bind-dnssec-slave' .
 
 Usage instructions:
 ===================
@@ -25,11 +28,11 @@ Check your config with: named-checkconf /etc/named.conf
 Take a note of the container ID from the shell prompt, exit, and 
 commit your changes:
 
-docker commit -a 'Your Name' --run='{"Cmd": ["/sbin/my_init"]}' <container ID> YourName/DNS_slave_with_zones:v3
+docker commit -a 'Your Name' --run='{"Cmd": ["/sbin/my_init"]}' <container ID> YourName/DNS_slave_with_zones
 
 Run your adjusted container:
 
-docker run -d -p 53:53/udp -p 53:53 YourName/DNS_slave_with_zones:v3
+docker run -d -p 53:53/udp -p 53:53 YourName/DNS_slave_with_zones
 
 Test each of your zones with dig, i.e.:
 
@@ -56,5 +59,9 @@ no way to query on any port except 53 running a server and resolver on the
 same IP isn't possible. You may run both on the same machine only if you use two
 IPs.
 
-TODO: Consider adding reply rate limiting (RRL) to this.
+TODO:
+
+Consider adding reply rate limiting (RRL) to this.
+
+Consider adding some easier way to setup zones. A single YAML or CSV config file would be good.
 
