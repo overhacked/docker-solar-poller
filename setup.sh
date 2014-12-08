@@ -2,9 +2,9 @@
 apt-get -qq update && apt-get -qq upgrade
 apt-get -qq install gcc make wget libssl-dev
 cd /tmp
-wget -q -O bind-9.9.6.tar.gz ftp://ftp.isc.org/isc/bind9/9.9.6/bind-9.9.6.tar.gz
-tar -xzf bind-9.9.6.tar.gz
-cd /tmp/bind-9.9.6
+wget -q -O bind-9.9.6-P1.tar.gz ftp://ftp.isc.org/isc/bind9/9.9.6-P1/bind-9.9.6-P1.tar.gz
+tar -xzf bind-9.9.6-P1.tar.gz
+cd /tmp/bind-9.9.6-P1
 ./configure --with-openssl --disable-linux-caps
 make
 groupadd bind && useradd -g bind -d /tmp -M -r -s /bin/false bind
