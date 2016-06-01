@@ -4,8 +4,8 @@ services:
         image: nginx
         restart: always
         ports:
-            - "10.30.21.226::80"
-            - "10.30.21.226::443"
+            - "10.30.21.226:80:80"
+            - "10.30.21.226:443:443"
         volumes:
             - "/home/docker/data/nginx/ssl:/etc/nginx/ssl:ro"
             - "/home/docker/munki_repo:/srv/munki_repo:ro"
@@ -14,7 +14,7 @@ services:
         image: rednut/unifi-controller
         restart: always
         ports:
-            - "10.30.21.226::8080"
+            - "10.30.21.226:8080:8080"
         volumes:
             - unifi_data:/usr/lib/unifi/data
     zabbix-db:
@@ -35,7 +35,7 @@ services:
             - ZS_DBUser=zabbix
             - ZS_DBPassword=otWocnv4fmeA3r
         ports:
-            - "10.30.21.226::10051"
+            - "10.30.21.226:10051:10051"
         volumes:
             - "/etc/localtime:/etc/localtime:ro"
             - "/home/docker/data/zabbix/etc/snmp:/etc/snmp:ro"
