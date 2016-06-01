@@ -1,0 +1,99 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 21 (0x15)
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C=US, ST=Georgia, L=Chattahoochee Hills, O=Manyfold Farm LLC, OU=Operations, CN=Many Fold Farm Root CA/emailAddress=hostmaster@manyfoldfarm.com
+        Validity
+            Not Before: Jun  1 10:16:52 2016 GMT
+            Not After : May 31 10:16:52 2021 GMT
+        Subject: C=US, ST=Georgia, L=Chattahoochee Hills, O=Manyfold Farm LLC, OU=Creamery, CN=ben.manyfoldfarm.com/emailAddress=hostmaster@manyfoldfarm.com
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:dc:90:55:aa:7d:11:b4:81:0c:05:9e:ff:b3:f0:
+                    73:1e:2b:87:dd:e8:51:2d:51:0b:f8:5c:19:84:be:
+                    5e:5a:c9:d1:d7:9c:19:9f:bb:0f:79:e1:a9:15:02:
+                    25:ef:06:7f:e7:ee:01:4b:e9:8d:0a:de:d6:a5:7d:
+                    42:b8:c8:82:1a:47:d9:b1:30:b4:9c:dd:86:ed:22:
+                    aa:f0:b1:e6:01:3d:04:e5:6e:c0:b7:a3:a6:c8:49:
+                    e5:61:13:6d:10:ef:0d:15:b3:e8:a3:8d:e1:f2:3d:
+                    9b:7e:03:06:c5:78:6c:01:21:72:e6:d5:58:44:bf:
+                    19:93:a6:bb:1e:78:44:ce:0c:9d:0d:81:e8:d1:da:
+                    5d:b9:29:77:9c:6b:00:94:2a:0d:4a:6d:e8:7d:36:
+                    78:38:29:98:a2:25:f5:57:a3:08:b9:4a:f2:4f:2c:
+                    cb:f7:f1:1b:43:3c:73:43:18:7b:e9:e9:a5:ab:62:
+                    17:d9:3d:15:cb:62:d2:76:21:aa:78:d2:3f:e2:1a:
+                    08:2f:70:d4:b7:11:77:17:d7:26:9d:64:c3:cc:f4:
+                    5b:e5:88:e2:b1:ab:7a:01:7e:d9:36:39:fe:a0:aa:
+                    2f:38:1b:5c:eb:0e:42:90:ce:7e:f2:c6:94:d6:79:
+                    38:ab:de:d0:36:5d:65:06:68:d2:ef:86:f5:8e:69:
+                    d8:93
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            X509v3 Subject Key Identifier: 
+                1F:08:88:CC:EF:BA:66:9A:8F:A5:B0:9D:B7:BE:16:80:56:CD:E2:54
+            X509v3 Authority Key Identifier: 
+                keyid:3D:27:17:6F:5E:FA:5A:76:29:E3:48:39:1C:0A:A3:95:CE:4A:C8:ED
+                DirName:/C=US/ST=Georgia/L=Chattahoochee Hills/O=Manyfold Farm LLC/OU=Operations/CN=Many Fold Farm Root CA/emailAddress=hostmaster@manyfoldfarm.com
+                serial:E0:ED:7A:EE:B2:3F:26:7A
+
+            X509v3 Extended Key Usage: 
+                TLS Web Server Authentication
+            X509v3 Key Usage: 
+                Digital Signature, Key Encipherment
+            X509v3 Subject Alternative Name: 
+                DNS:ben.manyfoldfarm.com, DNS:ben.office.manyfoldfarm.com, DNS:*.ben.office.manyfoldfarm.com, DNS:docker.office.manyfoldfarm.com, DNS:*.docker.office.manyfoldfarm.com
+    Signature Algorithm: sha256WithRSAEncryption
+         74:cb:fb:79:24:7a:0b:d6:f6:37:0e:ce:24:88:a6:ff:8f:32:
+         ed:f0:06:2c:e9:84:36:f6:9c:5a:af:7e:2c:c9:b0:86:91:d8:
+         99:2c:14:8e:7b:ed:ea:a0:64:61:4f:45:b7:17:0c:0a:4b:f0:
+         31:7e:10:58:34:ff:e7:1a:ad:db:03:18:d7:67:c6:97:f3:51:
+         c3:01:b0:93:96:c7:70:2f:85:d2:1a:a8:3d:e2:3e:92:53:e0:
+         19:c7:c4:41:e9:89:f8:47:68:bc:e6:52:6a:3f:5b:df:01:ab:
+         0c:65:32:0f:53:48:eb:06:01:c4:92:57:e7:f4:cb:8e:46:3f:
+         6b:69:4e:4e:11:f5:53:58:8d:74:79:0c:0c:b1:3a:66:9b:d7:
+         53:68:5c:e7:d7:bc:52:46:6e:14:3d:3c:ca:ed:94:69:89:1f:
+         03:34:6d:25:4c:ef:5d:e7:1a:b2:5a:a3:31:4e:1f:79:17:06:
+         31:ea:29:32:03:35:f1:d8:79:b2:71:ce:10:4e:4c:5e:1e:7f:
+         68:c9:1a:b8:05:66:4e:a8:2b:41:04:fa:9d:e3:05:a5:a6:70:
+         5a:f0:14:bb:fa:1f:d5:f6:33:bd:57:96:48:76:48:f7:b3:07:
+         3a:f6:06:7a:70:78:7e:54:eb:ae:58:c4:c3:c9:ab:d0:df:23:
+         a8:cf:07:79
+-----BEGIN CERTIFICATE-----
+MIIF1jCCBL6gAwIBAgIBFTANBgkqhkiG9w0BAQsFADCBuzELMAkGA1UEBhMCVVMx
+EDAOBgNVBAgMB0dlb3JnaWExHDAaBgNVBAcME0NoYXR0YWhvb2NoZWUgSGlsbHMx
+GjAYBgNVBAoMEU1hbnlmb2xkIEZhcm0gTExDMRMwEQYDVQQLDApPcGVyYXRpb25z
+MR8wHQYDVQQDDBZNYW55IEZvbGQgRmFybSBSb290IENBMSowKAYJKoZIhvcNAQkB
+Fhtob3N0bWFzdGVyQG1hbnlmb2xkZmFybS5jb20wHhcNMTYwNjAxMTAxNjUyWhcN
+MjEwNTMxMTAxNjUyWjCBtzELMAkGA1UEBhMCVVMxEDAOBgNVBAgMB0dlb3JnaWEx
+HDAaBgNVBAcME0NoYXR0YWhvb2NoZWUgSGlsbHMxGjAYBgNVBAoMEU1hbnlmb2xk
+IEZhcm0gTExDMREwDwYDVQQLDAhDcmVhbWVyeTEdMBsGA1UEAwwUYmVuLm1hbnlm
+b2xkZmFybS5jb20xKjAoBgkqhkiG9w0BCQEWG2hvc3RtYXN0ZXJAbWFueWZvbGRm
+YXJtLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANyQVap9EbSB
+DAWe/7Pwcx4rh93oUS1RC/hcGYS+XlrJ0decGZ+7D3nhqRUCJe8Gf+fuAUvpjQre
+1qV9QrjIghpH2bEwtJzdhu0iqvCx5gE9BOVuwLejpshJ5WETbRDvDRWz6KON4fI9
+m34DBsV4bAEhcubVWES/GZOmux54RM4MnQ2B6NHaXbkpd5xrAJQqDUpt6H02eDgp
+mKIl9VejCLlK8k8sy/fxG0M8c0MYe+nppatiF9k9Fcti0nYhqnjSP+IaCC9w1LcR
+dxfXJp1kw8z0W+WI4rGregF+2TY5/qCqLzgbXOsOQpDOfvLGlNZ5OKve0DZdZQZo
+0u+G9Y5p2JMCAwEAAaOCAeUwggHhMAkGA1UdEwQCMAAwHQYDVR0OBBYEFB8IiMzv
+umaaj6Wwnbe+FoBWzeJUMIHwBgNVHSMEgegwgeWAFD0nF29e+lp2KeNIORwKo5XO
+SsjtoYHBpIG+MIG7MQswCQYDVQQGEwJVUzEQMA4GA1UECAwHR2VvcmdpYTEcMBoG
+A1UEBwwTQ2hhdHRhaG9vY2hlZSBIaWxsczEaMBgGA1UECgwRTWFueWZvbGQgRmFy
+bSBMTEMxEzARBgNVBAsMCk9wZXJhdGlvbnMxHzAdBgNVBAMMFk1hbnkgRm9sZCBG
+YXJtIFJvb3QgQ0ExKjAoBgkqhkiG9w0BCQEWG2hvc3RtYXN0ZXJAbWFueWZvbGRm
+YXJtLmNvbYIJAODteu6yPyZ6MBMGA1UdJQQMMAoGCCsGAQUFBwMBMAsGA1UdDwQE
+AwIFoDCBnwYDVR0RBIGXMIGUghRiZW4ubWFueWZvbGRmYXJtLmNvbYIbYmVuLm9m
+ZmljZS5tYW55Zm9sZGZhcm0uY29tgh0qLmJlbi5vZmZpY2UubWFueWZvbGRmYXJt
+LmNvbYIeZG9ja2VyLm9mZmljZS5tYW55Zm9sZGZhcm0uY29tgiAqLmRvY2tlci5v
+ZmZpY2UubWFueWZvbGRmYXJtLmNvbTANBgkqhkiG9w0BAQsFAAOCAQEAdMv7eSR6
+C9b2Nw7OJIim/48y7fAGLOmENvacWq9+LMmwhpHYmSwUjnvt6qBkYU9FtxcMCkvw
+MX4QWDT/5xqt2wMY12fGl/NRwwGwk5bHcC+F0hqoPeI+klPgGcfEQemJ+EdovOZS
+aj9b3wGrDGUyD1NI6wYBxJJX5/TLjkY/a2lOThH1U1iNdHkMDLE6ZpvXU2hc59e8
+UkZuFD08yu2UaYkfAzRtJUzvXecaslqjMU4feRcGMeopMgM18dh5snHOEE5MXh5/
+aMkauAVmTqgrQQT6neMFpaZwWvAUu/of1fYzvVeWSHZI97MHOvYGenB4flTrrljE
+w8mr0N8jqM8HeQ==
+-----END CERTIFICATE-----

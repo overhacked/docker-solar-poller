@@ -1,0 +1,50 @@
+version: '2'
+services:
+    frontend:
+        image: nginx
+		restart: always
+        ports:
+            - "10.30.21.226::80"
+            - "10.30.21.226::443"
+        volumes:
+			- "/home/docker/data/nginx/ssl:/etc/nginx/ssl:ro"
+			- "/home/docker/munki_repo:/srv/munki_repo:ro"
+			- "/home/docker/data/nginx/conf.d:/etc/nginx/conf.d:ro"
+	unifi:
+        image: rednut/unifi-controller
+        restart: always
+        ports:
+            - "10.30.21.226::8080"
+        volumes:
+            - unifi_data:/usr/lib/unifi/data
+    zabbix-db:
+        image: zabbix/zabbix-db-mariadb
+        restart: always
+        environment:
+            - MARIADB_USER=zabbix
+            - MARIADB_PASS=otWocnv4fmeA3r
+        volumes:
+			- "/home/docker/data/zabbix-backups:/backups"
+			- "/etc/localtime:/etc/localtime:ro"
+			- zabbixdb_data:/var/lib/mysql
+	zabbix:
+		image: zabbix/zabbix-3.0:latest
+		restart: always
+		environment:
+			- ZS_DBHost=zabbix-db
+			- ZS_DBUser=zabbix
+			- ZS_DBPassword=otWocnv4fmeA3r
+		ports:
+			- "10.30.21.226::10051"
+		volumes:
+			- "/etc/localtime:/etc/localtime:ro"
+            - "/home/docker/data/zabbix/etc/snmp:/etc/snmp:ro"
+            - "/home/docker/data/zabbix/mibs:/usr/share/snmp/mibs:ro"
+
+volumes:
+    unifi_data:
+        external:
+            name: 5b41b458b38ef24838c27c400e65fe69cdb8f0eb1f861915e04860e6962b5219
+    zabbixdb_data:
+            external:
+                    name: cf4d1e8677c35471548aa63d9bf85560c5dd37cad716d2155844aec15cdf4668
