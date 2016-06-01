@@ -2,15 +2,15 @@ version: '2'
 services:
     frontend:
         image: nginx
-		restart: always
+        restart: always
         ports:
             - "10.30.21.226::80"
             - "10.30.21.226::443"
         volumes:
-			- "/home/docker/data/nginx/ssl:/etc/nginx/ssl:ro"
-			- "/home/docker/munki_repo:/srv/munki_repo:ro"
-			- "/home/docker/data/nginx/conf.d:/etc/nginx/conf.d:ro"
-	unifi:
+            - "/home/docker/data/nginx/ssl:/etc/nginx/ssl:ro"
+            - "/home/docker/munki_repo:/srv/munki_repo:ro"
+            - "/home/docker/data/nginx/conf.d:/etc/nginx/conf.d:ro"
+    unifi:
         image: rednut/unifi-controller
         restart: always
         ports:
@@ -24,20 +24,20 @@ services:
             - MARIADB_USER=zabbix
             - MARIADB_PASS=otWocnv4fmeA3r
         volumes:
-			- "/home/docker/data/zabbix-backups:/backups"
-			- "/etc/localtime:/etc/localtime:ro"
-			- zabbixdb_data:/var/lib/mysql
-	zabbix:
-		image: zabbix/zabbix-3.0:latest
-		restart: always
-		environment:
-			- ZS_DBHost=zabbix-db
-			- ZS_DBUser=zabbix
-			- ZS_DBPassword=otWocnv4fmeA3r
-		ports:
-			- "10.30.21.226::10051"
-		volumes:
-			- "/etc/localtime:/etc/localtime:ro"
+            - "/home/docker/data/zabbix-backups:/backups"
+            - "/etc/localtime:/etc/localtime:ro"
+            - zabbixdb_data:/var/lib/mysql
+    zabbix:
+        image: zabbix/zabbix-3.0:latest
+        restart: always
+        environment:
+            - ZS_DBHost=zabbix-db
+            - ZS_DBUser=zabbix
+            - ZS_DBPassword=otWocnv4fmeA3r
+        ports:
+            - "10.30.21.226::10051"
+        volumes:
+            - "/etc/localtime:/etc/localtime:ro"
             - "/home/docker/data/zabbix/etc/snmp:/etc/snmp:ro"
             - "/home/docker/data/zabbix/mibs:/usr/share/snmp/mibs:ro"
 
