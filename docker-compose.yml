@@ -4,8 +4,8 @@ services:
         image: nginx
         restart: always
         ports:
-            - "10.30.21.226:80:80"
-            - "10.30.21.226:443:443"
+            - "${DOCKER_EXTERNAL_IP}:80:80"
+            - "${DOCKER_EXTERNAL_IP}:443:443"
         volumes:
             - "/home/docker/data/nginx/ssl:/etc/nginx/ssl:ro"
             - "/home/docker/munki_repo:/srv/munki_repo:ro"
@@ -14,7 +14,7 @@ services:
         image: rednut/unifi-controller
         restart: always
         ports:
-            - "10.30.21.226:8080:8080"
+            - "${DOCKER_EXTERNAL_IP}:8080:8080"
         volumes:
             - unifi_data:/usr/lib/unifi/data
     zabbix-db:
@@ -35,11 +35,33 @@ services:
             - ZS_DBUser=zabbix
             - ZS_DBPassword=otWocnv4fmeA3r
         ports:
-            - "10.30.21.226:10051:10051"
+            - "${DOCKER_EXTERNAL_IP}:10051:10051"
         volumes:
             - "/etc/localtime:/etc/localtime:ro"
             - "/home/docker/data/zabbix/etc/snmp:/etc/snmp:ro"
             - "/home/docker/data/zabbix/mibs:/usr/share/snmp/mibs:ro"
+    mongo-graylog:
+        image: "mongo:3"
+        volumes:
+            - /home/docker/data/graylog/mongo:/data/db
+    elasticsearch-graylog:
+        image: "elasticsearch:2"
+        command: "elasticsearch -Des.cluster.name='graylog'"
+        volumes:
+            - /home/docker/data/graylog/elasticsearch:/usr/share/elasticsearch/data
+    graylog:
+        image: graylog2/server:2.0.2-1
+        volumes:
+            - /home/docker/data/graylog/journal:/usr/share/graylog/data/journal
+            - /home/docker/data/graylog/config:/usr/share/graylog/data/config
+        environment:
+            GRAYLOG_REST_TRANSPORT_URI: http://127.0.0.1:12900
+        links:
+            - mongo-graylog:mongo
+            - elasticsearch-graylog:elasticsearch
+        ports:
+            - "${DOCKER_EXTERNAL_IP}:12900:12900"
+            - "${DOCKER_EXTERNAL_IP}:514:514"
 
 volumes:
     unifi_data:
