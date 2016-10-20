@@ -11,12 +11,14 @@ services:
 #           - "/home/docker/munki_repo:/srv/munki_repo:ro"
             - "/storage/repos/docker-config/nginx/conf.d:/etc/nginx/conf.d:ro"
     unifi:
-        image: rednut/unifi-controller
+        image: rednut/unifi-controller:v5.2.7
+        build:
+            context: https://github.com/overhacked/docker-unifi-controller.git#unifi5
         restart: always
         ports:
             - "8080:8080"
-#        volumes:
-#            - unifi_data:/usr/lib/unifi/data
+        volumes:
+            - /storage/unifi-data:/usr/lib/unifi/data
 
 #    zabbix-db:
 #        image: zabbix/zabbix-db-mariadb
