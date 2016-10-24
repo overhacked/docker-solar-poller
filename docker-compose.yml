@@ -19,6 +19,19 @@ services:
             - "8080:8080"
         volumes:
             - /storage/unifi-data:/usr/lib/unifi/data
+    transmission:
+        image: linuxserver/transmission
+        restart: always
+        ports:
+            - "9091:9091"
+            - "51413:51413"
+            - "51413:51413/udp"
+        volumes:
+            - "/storage/repos/docker-config/transmission:/config"
+            - "/storage/export/downloads:/downloads"
+            - "/storage/export/downloads/torrents:/watch"
+        environment:
+            - TZ="America/New_York"
 
 #    zabbix-db:
 #        image: zabbix/zabbix-db-mariadb
