@@ -32,3 +32,19 @@ services:
         environment:
             - TZ="America/New_York"
 
+    opennms:
+        image: opennms/all:latest
+	environment:
+	  - DB_POSTGRES_PASSWORD=fhdj443%Ax
+	ports:
+	  - "8980:8980" # HTTP
+	  - "18980:18980" # JMX
+	  - "1099:1099" # KARAF RMI
+	  - "8101:8101" # KARAF SSH
+	  - "61616:61616" # MQ
+	  - "5432:5432" # PostgreSQL
+	  - "161:161" # SNMP Agent
+	  - "162:162" # SNMP Server
+	stdin_open: true
+	tty: true
+        
