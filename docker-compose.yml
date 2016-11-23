@@ -8,7 +8,6 @@ services:
             - "443:443"
         volumes:
             - "/storage/repos/docker-config/nginx/ssl:/etc/nginx/ssl:ro"
-#           - "/home/docker/munki_repo:/srv/munki_repo:ro"
             - "/storage/repos/docker-config/nginx/conf.d:/etc/nginx/conf.d:ro"
     unifi:
         image: rednut/unifi-controller:v5.2.7
@@ -33,52 +32,3 @@ services:
         environment:
             - TZ="America/New_York"
 
-#    zabbix-db:
-#        image: zabbix/zabbix-db-mariadb
-#        restart: always
-#        environment:
-#            - MARIADB_USER=zabbix
-#            - MARIADB_PASS=otWocnv4fmeA3r
-#        volumes:
-#            - "/storage/repos/docker-config/zabbix-backups:/backups"
-#            - "/etc/localtime:/etc/localtime:ro"
-#            - zabbixdb_data:/var/lib/mysql
-#    zabbix:
-#        image: zabbix/zabbix-3.0:latest
-#        restart: always
-#        environment:
-#            - ZS_DBHost=zabbix-db
-#            - ZS_DBUser=zabbix
-#            - ZS_DBPassword=otWocnv4fmeA3r
-#        ports:
-#            - "10051:10051"
-#        volumes:
-#            - "/etc/localtime:/etc/localtime:ro"
-#            - "/storage/repos/docker-config/zabbix/etc/snmp:/etc/snmp:ro"
-#            - "/storage/repos/docker-config/zabbix/mibs:/usr/share/snmp/mibs:ro"
-#    mongo-graylog:
-#        image: "mongo:3"
-#        volumes:
-#            - /storage/repos/docker-config/graylog/mongo:/data/db
-#    elasticsearch-graylog:
-#        image: "elasticsearch:2"
-#        command: "elasticsearch -Des.cluster.name='graylog'"
-#        volumes:
-#            - /storage/repos/docker-config/graylog/elasticsearch:/usr/share/elasticsearch/data
-#    graylog:
-#        image: graylog2/server:2.0.2-1
-#        volumes:
-#            - /storage/repos/docker-config/graylog/journal:/usr/share/graylog/data/journal
-#            - /storage/repos/docker-config/graylog/config:/usr/share/graylog/data/config
-#        environment:
-#            GRAYLOG_REST_TRANSPORT_URI: http://127.0.0.1:12900
-#        links:
-#            - mongo-graylog:mongo
-#            - elasticsearch-graylog:elasticsearch
-#        ports:
-#            - "12900:12900"
-#            - "514:514"
-
-#volumes:
-#    zabbixdb_data:
-#        external: true
