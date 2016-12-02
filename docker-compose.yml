@@ -17,7 +17,8 @@ services:
             context: https://github.com/overhacked/docker-unifi-controller.git#unifi5
         restart: always
         ports:
-            - "8080:8080"
+            - "8080:8080" # INFORM
+            - "3478:3478/udp" # STUN
         volumes:
             - /storage/unifi-data:/usr/lib/unifi/data
     transmission:
