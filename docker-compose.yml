@@ -10,6 +10,7 @@ services:
         volumes:
             - "/storage/repos/docker-config/nginx/ssl:/etc/nginx/ssl:ro"
             - "/storage/repos/docker-config/nginx/conf.d:/etc/nginx/conf.d:ro"
+            - "/storage/mac/munki_repo:/srv/munki_repo:ro"
     unifi:
         image: rednut/unifi-controller:v5.2.7
         build:
