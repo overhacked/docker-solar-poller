@@ -70,6 +70,11 @@ services:
             - /storage/mac/swupdate/html:/reposado/html
             - /storage/mac/swupdate/metadata:/reposado/metadata
             - /storage/repos/docker-config/reposado/preferences.plist:/reposado/code/preferences.plist
+    gitlist:
+        image: davibe/gitlist-docker
+        restart: always
+        volumes:
+            - /storage/repos:/repos
 volumes:
     zabbix-db-storage:
         driver: local
