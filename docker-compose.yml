@@ -8,9 +8,9 @@ services:
             - "80:80"
             - "443:443"
         volumes:
-            - "/storage/repos/docker-config/nginx/ssl:/etc/nginx/ssl:ro"
-            - "/storage/repos/docker-config/nginx/conf.d:/etc/nginx/conf.d:ro"
-            - "/storage/repos/docker-config/nginx/htpasswd:/etc/nginx/htpasswd:ro"
+            - "/storage/conf/docker/nginx/ssl:/etc/nginx/ssl:ro"
+            - "/storage/conf/docker/nginx/conf.d:/etc/nginx/conf.d:ro"
+            - "/storage/conf/docker/nginx/htpasswd:/etc/nginx/htpasswd:ro"
             - "/storage/mac/munki_repo:/srv/munki_repo:ro"
     unifi:
         image: rednut/unifi-controller:v5.2.7
@@ -30,7 +30,7 @@ services:
             - "51413:51413"
             - "51413:51413/udp"
         volumes:
-            - "/storage/repos/docker-config/transmission:/config"
+            - "/storage/conf/docker/transmission:/config"
             - "/storage/export/downloads:/downloads"
             - "/storage/export/downloads/torrents:/watch"
         environment:
@@ -52,8 +52,8 @@ services:
             - "10051:10051"
         volumes:
             - /etc/localtime:/etc/localtime:ro
-            - /storage/repos/docker-config/zabbix/etc/snmp:/etc/snmp:ro
-            - /storage/repos/docker-config/zabbix/mibs:/usr/share/snmp/mibs:ro
+            - /storage/conf/docker/zabbix/etc/snmp:/etc/snmp:ro
+            - /storage/conf/docker/zabbix/mibs:/usr/share/snmp/mibs:ro
         links:
             - zabbix-db:zabbix.db
         environment:
@@ -70,7 +70,7 @@ services:
         volumes:
             - /storage/mac/swupdate/html:/reposado/html
             - /storage/mac/swupdate/metadata:/reposado/metadata
-            - /storage/repos/docker-config/reposado/preferences.plist:/reposado/code/preferences.plist
+            - /storage/conf/docker/reposado/preferences.plist:/reposado/code/preferences.plist
     gitlist:
         image: davibe/gitlist-docker
         restart: always
