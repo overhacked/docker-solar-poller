@@ -12,6 +12,7 @@ services:
             - "/storage/conf/docker/nginx/conf.d:/etc/nginx/conf.d:ro"
             - "/storage/conf/docker/nginx/htpasswd:/etc/nginx/htpasswd:ro"
             - "/storage/mac/munki_repo:/srv/munki_repo:ro"
+            - "/storage/conf/docker/wpad:/srv/wpad:ro"
     unifi:
         image: rednut/unifi-controller:v5.2.7
         build:
