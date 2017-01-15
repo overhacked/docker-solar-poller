@@ -16,7 +16,7 @@ services:
     unifi:
         image: rednut/unifi-controller
         build:
-            context: https://github.com/overhacked/docker-unifi-controller.git#unifi5
+            context: https://github.com/overhacked/docker-unifi-controller.git#v5.4.9-RC
         restart: always
         ports:
             - "8080:8080" # INFORM
