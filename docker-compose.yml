@@ -14,7 +14,7 @@ services:
             - "/storage/mac/munki_repo:/srv/munki_repo:ro"
             - "/storage/conf/docker/wpad:/srv/wpad:ro"
     unifi:
-        image: rednut/unifi-controller:v5.2.7
+        image: rednut/unifi-controller
         build:
             context: https://github.com/overhacked/docker-unifi-controller.git#unifi5
         restart: always
@@ -22,7 +22,7 @@ services:
             - "8080:8080" # INFORM
             - "3478:3478/udp" # STUN
         volumes:
-            - /storage/unifi-data:/usr/lib/unifi/data
+            - /storage/data/unifi:/usr/lib/unifi/data
     transmission:
         image: linuxserver/transmission
         restart: always
