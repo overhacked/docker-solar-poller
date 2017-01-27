@@ -13,6 +13,7 @@ services:
             - "/storage/conf/docker/nginx/htpasswd:/etc/nginx/htpasswd:ro"
             - "/storage/mac/munki_repo:/srv/munki_repo:ro"
             - "/storage/conf/docker/wpad:/srv/wpad:ro"
+            - "/storage/backup/tcpdump:/tcpdump:rw"
     unifi:
         image: rednut/unifi-controller
         build:
@@ -38,6 +39,7 @@ services:
             - TZ="America/New_York"
     zabbix-db:
         image: monitoringartist/zabbix-db-mariadb
+        restart: always
         volumes:
             - /storage/data/zabbix:/var/lib/mysql
             - /storage/backup/docker/zabbix:/backups
@@ -47,6 +49,7 @@ services:
             - MARIADB_PASS=otWocnv4fmeA3r
     zabbix-server:
         image: monitoringartist/zabbix-xxl:latest
+        restart: always
         depends_on:
             - zabbix-db
         ports:
@@ -77,3 +80,29 @@ services:
         restart: always
         volumes:
             - /storage/repos:/repos
+    mongo-db:
+        image: "mongo:3"
+        restart: always
+        volumes:
+            - /storage/data/graylog/mongo:/data/db
+    elasticsearch-graylog:
+        image: "elasticsearch:2"
+        restart: always
+        volumes:
+            - /storage/data/graylog/elasticsearch:/usr/share/elasticsearch/data
+        command: "elasticsearch -Des.cluster.name='graylog'"
+    graylog:
+        image: graylog2/server:2.1.2-1
+        restart: always
+        volumes:
+            - /storage/data/graylog/journal:/usr/share/graylog/data/journal
+            - /storage/conf/graylog:/usr/share/graylog/data/config
+        environment:
+            - GRAYLOG_SERVER_JAVA_OPTS=-Xmx4096m
+        links:
+            - mongo-db:mongo
+            - elasticsearch-graylog:elasticsearch
+        ports:
+            - "9000:9000"
+            - "12201/udp:12201/udp"
+            - "1514-1524:1514-1524/udp"
