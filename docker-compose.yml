@@ -1,5 +1,5 @@
 # vim: et:ts=4:sw=4
-version: '2'
+version: '2.1'
 services:
     frontend:
         image: nginx
@@ -14,6 +14,11 @@ services:
             - "/storage/mac/munki_repo:/srv/munki_repo:ro"
             - "/storage/conf/docker/wpad:/srv/wpad:ro"
             - "/storage/backup/tcpdump:/tcpdump:rw"
+            - "/var/cache/nginx"
+        networks:
+            default:
+                ipv4_address: 172.16.243.254
+                ipv6_address: 2001:559:80e5:d0:cc::fe
     unifi:
         image: rednut/unifi-controller
         build:
@@ -126,3 +131,15 @@ services:
             - "9000:9000"
             - "12201/udp:12201/udp"
             - "1514-1524:1514-1524/udp"
+
+networks:
+    default:
+        driver: bridge
+        enable_ipv6: true
+        ipam:
+            driver: default
+            config:
+            - subnet: 172.16.243.0/24
+              gateway: 172.16.243.1
+            - subnet: 2001:559:80e5:d0:cc::/80
+              gateway: 2001:559:80e5:d0:cc::1
