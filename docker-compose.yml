@@ -91,6 +91,15 @@ services:
         restart: always
         volumes:
             - /storage/repos:/repos
+    ntop:
+        build: ./ntopng/build
+        image: overhacked/ntopng-nprobe:latest
+        restart: always
+        ports:
+            - "2055:2055/udp"
+        volumes:
+            - "/storage/conf/docker/ntopng/conf:/etc/ntopng:ro"
+            - "/storage/conf/docker/ntopng/data:/var/lib/redis:rw"
     mongo-db:
         image: "mongo:3"
         restart: always

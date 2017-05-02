@@ -1,0 +1,1 @@
+setfacl -m g:105:rwx data # Allow redis group (id 105) to write to data dir
