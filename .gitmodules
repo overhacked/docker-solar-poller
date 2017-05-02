@@ -1,0 +1,3 @@
+[submodule "transmission/build"]
+	path = transmission/build
+	url = https://github.com/haugene/docker-transmission-openvpn.git

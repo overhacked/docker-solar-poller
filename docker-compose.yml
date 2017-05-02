@@ -25,18 +25,29 @@ services:
         volumes:
             - /storage/data/unifi:/usr/lib/unifi/data
     transmission:
-        image: linuxserver/transmission
+        image: overhacked/transmission-openvpn
+        build: ./transmission/build
+        privileged: true
         restart: always
-        ports:
-            - "9091:9091"
-            - "51413:51413"
-            - "51413:51413/udp"
+#       ports:
+#           - "51413:51413"
+#           - "51413:51413/udp"
+        dns:
+            - 8.8.8.8
+            - 8.8.4.4
         volumes:
-            - "/storage/conf/docker/transmission:/config"
-            - "/storage/export/downloads:/downloads"
-            - "/storage/export/downloads/torrents:/watch"
+            - "/storage/conf/docker/transmission/conf:/data/transmission-home"
+            - "/storage/export/downloads:/data"
+#           - "/storage/export/downloads/torrents:/watch"
+            - "/etc/localtime:/etc/localtime:ro"
         environment:
-            - TZ="America/New_York"
+#           - TZ="America/New_York"
+            - OPENVPN_PROVIDER=PIA
+            - OPENVPN_USERNAME=p4995968
+            - OPENVPN_PASSWORD=JsJTPa9nFY
+            - OPENVPN_OPTS=--inactive 3600 --ping 10 --ping-exit 60
+            - LOCAL_NETWORK=10.30.0.0/16
+            - TRANSMISSION_WATCH_DIR="/data/torrents"
     zabbix-db:
         image: monitoringartist/zabbix-db-mariadb
         restart: always
