@@ -1,3 +1,6 @@
 [submodule "transmission/build"]
 	path = transmission/build
 	url = https://github.com/haugene/docker-transmission-openvpn.git
+[submodule "unifi/build"]
+	path = unifi/build
+	url = git@github.com:overhacked/docker-unifi-controller.git
