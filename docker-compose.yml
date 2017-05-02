@@ -21,8 +21,7 @@ services:
                 ipv6_address: 2001:559:80e5:d0:cc::fe
     unifi:
         image: rednut/unifi-controller
-        build:
-            context: https://github.com/overhacked/docker-unifi-controller.git#v5.4.9-RC
+        build: ./unifi/build
         restart: always
         ports:
             - "8080:8080" # INFORM
