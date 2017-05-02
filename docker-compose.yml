@@ -127,8 +127,7 @@ services:
             - mongo-db:mongo
             - elasticsearch-graylog:elasticsearch
         ports:
-            - "9000:9000"
-            - "12201/udp:12201/udp"
+            - "12201:12201/udp"
             - "1514-1524:1514-1524/udp"
 
 networks:
