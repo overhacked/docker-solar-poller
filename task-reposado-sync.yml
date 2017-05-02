@@ -6,3 +6,7 @@ services:
             file: docker-compose.yml
             service: reposado
         command: /reposado/code/repo_sync --log /dev/stdout
+        logging:
+            driver: journald
+            options:
+                tag: reposado-sync
