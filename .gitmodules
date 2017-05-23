@@ -4,3 +4,9 @@
 [submodule "unifi/build"]
 	path = unifi/build
 	url = git@github.com:overhacked/docker-unifi-controller.git
+[submodule "bind-slave/build"]
+	path = bind-slave/build
+	url = https://github.com/unixtastic/bind-DNSSEC-slave
+[submodule "postfix/build"]
+	path = postfix/build
+	url = https://github.com/juanluisbaptiste/docker-postfix.git
