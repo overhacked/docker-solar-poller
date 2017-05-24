@@ -24,8 +24,8 @@ services:
         build: ./bind-slave/build
         restart: always
         ports:
-            - "53:53/udp"
-            - "53:53"
+            - "${EXTERNAL_IP:-0.0.0.0}:53:53/udp"
+            - "${EXTERNAL_IP:-0.0.0.0}:53:53"
         volumes:
             - "/storage/conf/docker/bind-slave/conf/named.conf:/etc/bind/named.conf.local:ro"
         networks:
