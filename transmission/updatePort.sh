@@ -18,6 +18,8 @@ transmission_settings_file=${TRANSMISSION_HOME}/settings.json
 # First get a port from PIA
 #
 
+local_ip=`ip addr show dev tun0 permanent | grep -oE "inet *10\.[0-9]+\.[0-9]+\.[0-9]+" | cut -d' ' -f2`
+
 new_client_id() {
     head -n 100 /dev/urandom | md5sum | tr -d " -" | tee $pia_client_id_file
 }
@@ -29,8 +31,9 @@ if [ -z ${pia_client_id} ]; then
 fi
 
 # Get the port
-port_assignment_url="http://209.222.18.222:2000/?client_id=$pia_client_id"
-pia_response=$(curl -s -f $port_assignment_url)
+port_assignment_url="https://www.privateinternetaccess.com/vpninfo/port_forward_assignment"
+curl_post_fields="-F user=$pia_username -F pass=$pia_passwd -F client_id=$pia_client_id -F local_ip=$local_ip"
+pia_response=$(curl -s -f -X POST $curl_post_fields $port_assignment_url)
 
 # Check for curl error (curl will fail on HTTP errors with -f flag)
 ret=$?
