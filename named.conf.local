@@ -1,13 +1,4 @@
 
-options {
-        directory       "/var/tmp";
-        allow-transfer { localhost; }; // Useful for testing.
-        recursion no;
-
-// Return a fake string for the version number. (not real security, but fun)
-        version "Colorless green ideas sleep furiously";
-};
-
 key "rndc-key" {
 	algorithm hmac-md5;
 	secret "_RNDC_SECRET_GOES_HERE_";
