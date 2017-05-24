@@ -19,6 +19,29 @@ services:
             default:
                 ipv4_address: 172.16.243.254
                 ipv6_address: 2001:559:80e5:d0:cc::fe
+    smtp:
+        image: wader/postfix-relay
+        build: ./postfix/build
+        restart: always
+        ports:
+            - "25:25"
+        volumes:
+            - "/storage/conf/docker/postfix/dkim-keys:/etc/opendkim/keys"
+            - "/storage/conf/docker/postfix/ssl:/etc/postfix/ssl:ro"
+            - "/storage/conf/docker/postfix/opendkim.conf:/etc/opendkim.conf:ro"
+        environment:
+            POSTFIX_myhostname: zee.edge.manyfoldfarm.com
+            POSTFIX_mydestination: localhost, zee, zee.edge.manyfoldfarm.com
+            POSTFIX_mynetworks: 127.0.0.0/8 172.16.243.0/24 10.30.0.0/16 50.207.215.128/27 [2001:559:80e5::]/48
+            POSTFIX_smtp_tls_security_level: may
+            POSTFIX_smtpd_tls_security_level: may
+            POSTFIX_smtpd_tls_cert_file: /etc/postfix/ssl/server.crt
+            POSTFIX_smtpd_tls_key_file: /etc/postfix/ssl/server.key
+            OPENDKIM_DOMAINS: manyfoldfarm.com sineya.org
+        networks:
+            default:
+                ipv4_address: 172.16.243.253
+                ipv6_address: 2001:559:80e5:d0:cc::25
     unifi:
         image: rednut/unifi-controller
         build: ./unifi/build

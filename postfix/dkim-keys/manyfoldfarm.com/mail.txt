@@ -1,0 +1,2 @@
+mail._domainkey	IN	TXT	( "v=DKIM1; k=rsa; "
+	  "p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCiKwr30XIyAuc+r6Fxs9qjfGOP+q1N9QLfEd/2BgdsJ08k4bIOOwDOT8hB3SdDOXt+vDa2tkhoPirt1VzveCsju1IwwfYLfk5sWIt7oIA3vQEzuz5tiIz3NoIFGFhquZ/9Uo/24OFABrEDcAA6xrrRTl/GsXqRSxrGM7PTukhwVQIDAQAB" )  ; ----- DKIM key mail for manyfoldfarm.com
