@@ -42,16 +42,24 @@ services:
             - "/storage/conf/docker/postfix/dkim-keys:/etc/opendkim/keys"
             - "/storage/conf/docker/postfix/ssl:/etc/postfix/ssl:ro"
             - "/storage/conf/docker/postfix/opendkim.conf:/etc/opendkim.conf:ro"
+            - /var/lib/postfix
+            - /var/spool/postfix
+            - /var/mail
         environment:
-            POSTFIX_myhostname: zee.edge.manyfoldfarm.com
-            POSTFIX_mydestination: localhost, zee, zee.edge.manyfoldfarm.com
+            POSTFIX_myhostname: mail.sineya.org
+            POSTFIX_mydestination: localhost, zee, zee.edge.manyfoldfarm.com, mail, mail.sineya.org
             POSTFIX_mynetworks: 127.0.0.0/8 172.16.243.0/24 10.30.0.0/16 50.207.215.128/27 [2001:559:80e5::]/48
+            POSTFIX_smtp_bind_address: 50.207.215.133
+            POSTFIX_smtp_bind_address6: 2001:559:80e5:ed:d0::133
             POSTFIX_smtp_tls_security_level: may
             POSTFIX_smtpd_tls_security_level: may
             POSTFIX_smtpd_tls_cert_file: /etc/postfix/ssl/server.crt
             POSTFIX_smtpd_tls_key_file: /etc/postfix/ssl/server.key
             OPENDKIM_DOMAINS: manyfoldfarm.com sineya.org
         networks:
+            rackvlan:
+                ipv4_address: 50.207.215.133
+                ipv6_address: 2001:559:80e5:ed:d0::133
             default:
                 ipv4_address: 172.16.243.253
                 ipv6_address: 2001:559:80e5:d0:cc::25
@@ -177,3 +185,19 @@ networks:
               gateway: 172.16.243.1
             - subnet: 2001:559:80e5:d0:cc::/80
               gateway: 2001:559:80e5:d0:cc::1
+    rackvlan:
+        driver: macvlan
+        enable_ipv6: true
+        driver_opts:
+            parent: enp4s0f1
+        ipam:
+            config:
+                - subnet: 50.207.215.128/29
+                  gateway: 50.207.215.129
+                  ip_range: 50.207.215.132/30
+                  aux_addresses:
+                    # Prevent Jonathan's address from being handed out
+                    jonathan: 50.207.215.132
+                - subnet: 2001:559:80e5:ed::/64
+                  gateway: 2001:559:80e5:ed::1
+                  ip_range: 2001:559:80e5:ed:d0::/80
