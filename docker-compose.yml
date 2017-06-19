@@ -123,6 +123,7 @@ services:
             - ZS_DBHost=zabbix.db
             - ZS_DBUser=zabbix
             - ZS_DBPassword=otWocnv4fmeA3r
+            - ZS_StartIPMIPollers=2
     reposado:
         #image: macadmins/reposado
         build:
