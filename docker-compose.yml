@@ -194,7 +194,7 @@ networks:
         driver: macvlan
         enable_ipv6: true
         driver_opts:
-            parent: enp4s0f1
+            parent: enp4s0f0
         ipam:
             config:
                 - subnet: 50.207.215.128/29
