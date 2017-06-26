@@ -117,6 +117,7 @@ services:
             - /etc/localtime:/etc/localtime:ro
             - /storage/conf/docker/zabbix/etc/snmp:/etc/snmp:ro
             - /storage/conf/docker/zabbix/mibs:/usr/share/snmp/mibs:ro
+            - /storage/conf/docker/zabbix/modules:/usr/lib/zabbix/modules:ro
         links:
             - zabbix-db:zabbix.db
         environment:
@@ -124,10 +125,26 @@ services:
             - ZS_DBUser=zabbix
             - ZS_DBPassword=otWocnv4fmeA3r
             - ZS_StartIPMIPollers=2
+            - ZS_LoadModulePath=/usr/lib/zabbix/modules
+            - ZS_LoadModule=unifi.so
         networks:
             default:
                 ipv4_address: 172.16.243.251
                 ipv6_address: 2001:559:80e5:d0:cc::5b
+    unifi-miner:
+        image: overhacked/unifi-miner-proxy:latest
+        build: ./unifi/build-miner-proxy
+        environment:
+            MINER_UniFiLocation: https://unifi:8443
+            MINER_UniFiVersion: v4
+            MINER_UniFiUser: stat
+            MINER_UniFiPass: stat
+            MINER_DebugLevel: 1
+            MINER_SiteName: nx4d875m
+#        logging:
+#            driver: journald
+#            options:
+#                tag: unifi-miner
     reposado:
         #image: macadmins/reposado
         build:
