@@ -1,0 +1,1 @@
+* * * * * /root/egauge-poller.sh 2>&1 | logger -t egauge-poller.sh
