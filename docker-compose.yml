@@ -131,6 +131,17 @@ services:
             default:
                 ipv4_address: 172.16.243.251
                 ipv6_address: 2001:559:80e5:d0:cc::5b
+    zabbix-solar:
+        image: overhacked/solar-poller:latest
+        build: ./solar-poller/build
+        restart: always
+        depends_on:
+            - zabbix-server
+        links:
+            - zabbix-server:zabbix.server
+        environment:
+            SP_EGAUGE_URI: http://solar-gauge.res.sineya.org/cgi-bin/egauge?v1&inst&tot
+            SP_ZABBIX_SERVER: zabbix.server
     unifi-miner:
         image: overhacked/unifi-miner-proxy:latest
         build: ./unifi/build-miner-proxy
