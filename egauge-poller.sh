@@ -1,5 +1,4 @@
-#!/bin/bash
-source /etc/container_environment.sh
+#!/bin/sh
 
 if [ -z "$SP_EGAUGE_URI" -o -z "$SP_ZABBIX_SERVER" ]; then
 	echo \$SP_EGAUGE_URI or \$SP_ZABBIX_SERVER is unset. Exiting.

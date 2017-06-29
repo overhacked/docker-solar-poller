@@ -1,16 +1,11 @@
-FROM phusion/baseimage:latest
+FROM alpine:3.6
 
-# Use baseimage-docker's init system.
-CMD ["/sbin/my_init"]
+CMD ["/usr/sbin/crond","-d","7","-f"]
+
+RUN apk add --no-cache libxslt curl zabbix-utils
 
 ADD egauge-to-zabbix.xsl egauge-poller.sh crontab /root/
 
-RUN crontab /root/crontab
+RUN chmod +x /root/egauge-poller.sh && crontab /root/crontab
 
 ENV SP_EGAUGE_URI="http://solar/cgi-bin/egauge?v1&inst&tot" SP_ZABBIX_SERVER="127.0.0.1" SP_ZABBIX_PORT="10051"
-
-RUN apt-get update 
-
-RUN apt-get install -y xsltproc curl zabbix-agent && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-RUN systemctl disable zabbix-agent
