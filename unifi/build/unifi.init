@@ -1,0 +1,62 @@
+#!/bin/sh
+#
+# Adapted from UBNT-packaged init script 2017-07-11
+#
+
+
+NAME="unifi"
+
+BASEDIR="/app"
+
+PATH=/bin:/usr/bin:/sbin:/usr/sbin
+
+MONGOPORT=27117
+
+CODEPATH=${BASEDIR}
+
+DATADIR=${BASEDIR}/data
+LOGDIR=${BASEDIR}/logs
+RUNDIR=${BASEDIR}/run
+[ -z "${UNIFI_DATA_DIR}" ] || DATADIR=${UNIFI_DATA_DIR}
+[ -z "${UNIFI_LOG_DIR}" ] || LOGDIR=${UNIFI_LOG_DIR}
+[ -z "${UNIFI_RUN_DIR}" ] || RUNDIR=${UNIFI_RUN_DIR}
+for dir in $DATADIR $LOGDIR $RUNDIR; do
+	[ -d "$dir" ] || mkdir -p "$dir";
+done
+
+JAVA_ENTROPY_GATHER_DEVICE=
+JVM_MAX_HEAP_SIZE=1024M
+JVM_INIT_HEAP_SIZE=
+
+JVM_EXTRA_OPTS=
+
+MONGOLOCK="${DATADIR}/db/mongod.lock"
+JVM_EXTRA_OPTS="${JVM_EXTRA_OPTS} -Dunifi.datadir=${DATADIR} -Dunifi.logdir=${LOGDIR} -Dunifi.rundir=${RUNDIR}"
+
+if [ ! -z "${JAVA_ENTROPY_GATHER_DEVICE}" ]; then
+	JVM_EXTRA_OPTS="${JVM_EXTRA_OPTS} -Djava.security.egd=${JAVA_ENTROPY_GATHER_DEVICE}"
+fi
+
+if [ ! -z "${JVM_MAX_HEAP_SIZE}" ]; then
+	JVM_EXTRA_OPTS="${JVM_EXTRA_OPTS} -Xmx${JVM_MAX_HEAP_SIZE}"
+fi
+
+if [ ! -z "${JVM_INIT_HEAP_SIZE}" ]; then
+	JVM_EXTRA_OPTS="${JVM_EXTRA_OPTS} -Xms${JVM_INIT_HEAP_SIZE}"
+fi
+
+if [ ! -z "${UNIFI_JVM_EXTRA_OPTS}" ]; then
+	JVM_EXTRA_OPTS="${JVM_EXTRA_OPTS} ${UNIFI_JVM_EXTRA_OPTS}"
+fi
+
+JVM_OPTS="${JVM_EXTRA_OPTS} -Djava.awt.headless=true -Dfile.encoding=UTF-8"
+
+cd ${BASEDIR}
+
+/sbin/syslogd -O /proc/1/fd/1
+for file in mongod server; do
+	[ -e "${LOGDIR}/${file}.log" ] && rm -f "${LOGDIR}/${file}.log"
+	mkfifo "${LOGDIR}/${file}.log"
+	logger -t ${file} < ${LOGDIR}/${file}.log &
+done
+exec /usr/bin/java ${JVM_OPTS} -jar "${BASEDIR}/lib/ace.jar" start
