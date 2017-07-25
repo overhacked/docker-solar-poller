@@ -221,11 +221,12 @@ services:
             - /storage/data/graylog/elasticsearch:/usr/share/elasticsearch/data
         command: "elasticsearch -Des.cluster.name='graylog'"
     graylog:
-        image: graylog2/server:2.1.2-1
+        image: graylog2/server:2.2.3-1
         restart: always
         volumes:
             - /storage/data/graylog/journal:/usr/share/graylog/data/journal
-            - /storage/conf/graylog:/usr/share/graylog/data/config
+            - /storage/conf/graylog:/usr/share/graylog/data/config:ro
+            - /storage/data/graylog/plugin/graylog-plugin-netflow-0.1.1.jar:/usr/share/graylog/plugin/graylog-plugin-netflow-0.1.1.jar:ro
         environment:
             - GRAYLOG_SERVER_JAVA_OPTS=-Xmx4096m
         links:
@@ -234,7 +235,7 @@ services:
         ports:
             - "12201:12201/udp"
             - "1514-1524:1514-1524/udp"
-
+            - "2055:2055/udp"
 networks:
     default:
         driver: bridge
