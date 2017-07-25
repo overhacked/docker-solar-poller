@@ -28,6 +28,10 @@ services:
             - "${EXTERNAL_IP:-0.0.0.0}:53:53"
         volumes:
             - "/storage/conf/docker/bind-slave/conf/named.conf:/etc/bind/named.conf.local:ro"
+        logging:
+            driver: gelf
+            options:
+                gelf-address: ${GELF_TARGET}
         networks:
             default:
                 ipv4_address: 172.16.243.250
@@ -56,6 +60,10 @@ services:
             POSTFIX_smtpd_tls_cert_file: /etc/postfix/ssl/server.crt
             POSTFIX_smtpd_tls_key_file: /etc/postfix/ssl/server.key
             OPENDKIM_DOMAINS: manyfoldfarm.com sineya.org
+        logging:
+            driver: gelf
+            options:
+                gelf-address: ${GELF_TARGET}
         networks:
             rackvlan:
                 ipv4_address: 50.207.215.133
@@ -76,6 +84,10 @@ services:
         volumes:
             - /storage/data/unifi:/app/data
         cpu_shares: 512
+        logging:
+            driver: gelf
+            options:
+                gelf-address: ${GELF_TARGET}
     transmission:
         image: overhacked/transmission-openvpn
         build: ./transmission/build
@@ -110,6 +122,10 @@ services:
         environment:
             - MARIADB_USER=zabbix
             - MARIADB_PASS=otWocnv4fmeA3r
+        logging:
+            driver: gelf
+            options:
+                gelf-address: ${GELF_TARGET}
     zabbix-server:
         image: monitoringartist/zabbix-xxl:latest
         restart: always
@@ -131,6 +147,10 @@ services:
             - ZS_StartIPMIPollers=2
             - ZS_LoadModulePath=/usr/lib/zabbix/modules
             - ZS_LoadModule=unifi.so
+        logging:
+            driver: gelf
+            options:
+                gelf-address: ${GELF_TARGET}
         networks:
             default:
                 ipv4_address: 172.16.243.251

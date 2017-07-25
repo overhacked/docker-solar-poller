@@ -7,6 +7,7 @@ services:
             service: reposado
         command: /reposado/code/repo_sync --log /dev/stdout
         logging:
-            driver: journald
+            driver: gelf
             options:
+                gelf-address: ${GELF_TARGET}
                 tag: reposado-sync
