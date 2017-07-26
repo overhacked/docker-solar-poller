@@ -15,6 +15,10 @@ services:
             - "/storage/conf/docker/wpad:/srv/wpad:ro"
             - "/storage/backup/tcpdump:/tcpdump:rw"
             - "/var/cache/nginx"
+        logging:
+            driver: gelf
+            options:
+                gelf-address: ${GELF_TARGET}
         networks:
             default:
                 ipv4_address: 172.16.243.254
