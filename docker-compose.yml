@@ -80,7 +80,7 @@ services:
         build:
             context: ./unifi/build
             args:
-                UNIFI_VERSION: 5.4.16
+                UNIFI_VERSION: 5.4.18
         restart: always
         ports:
             - "8080:8080" # INFORM
