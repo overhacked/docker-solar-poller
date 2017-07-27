@@ -6,9 +6,9 @@
 
 NAME="unifi"
 
-BASEDIR="/app"
+BASEDIR="/usr/lib/unifi"
 
-PATH=/bin:/usr/bin:/sbin:/usr/sbin
+PATH="/bin:/usr/bin:/sbin:/usr/sbin:${BASEDIR}"
 
 MONGOPORT=27117
 
@@ -53,10 +53,9 @@ JVM_OPTS="${JVM_EXTRA_OPTS} -Djava.awt.headless=true -Dfile.encoding=UTF-8"
 
 cd ${BASEDIR}
 
-/sbin/syslogd -O /proc/1/fd/1
-for file in mongod server; do
+for file in server; do
 	[ -e "${LOGDIR}/${file}.log" ] && rm -f "${LOGDIR}/${file}.log"
 	mkfifo "${LOGDIR}/${file}.log"
-	logger -t ${file} < ${LOGDIR}/${file}.log &
+	cat "${LOGDIR}/${file}.log" >> /proc/1/fd/1 &
 done
 exec /usr/bin/java ${JVM_OPTS} -jar "${BASEDIR}/lib/ace.jar" start

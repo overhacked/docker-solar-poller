@@ -1,24 +1,20 @@
-FROM openjdk:8-alpine
+FROM openjdk:8-jre-slim
 
 ARG UNIFI_VERSION
-ENV UNIFI_PKG_FILE=/tmp/unifi.deb
 
-CMD ["/app/bin/unifi.init"]
+CMD ["/root/unifi.init"]
 
-VOLUME /app/data
+VOLUME /usr/lib/unifi/data
 # https://help.ubnt.com/hc/en-us/articles/218506997-UniFi-Ports-Used
 EXPOSE 8443 8880 8843 8080 6789 3478/udp 10001/udp 5656-5699/udp
 
-RUN apk add --no-cache mongodb binutils libc6-compat
+ADD 100-ubnt.list /etc/apt/sources.list.d/100-ubnt.list
+RUN apt-get update && apt-get install -y gnupg2
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv 06E85760C0A52C50 \
+	&& apt-get update \
+	&& apt-get install -y unifi${UNIFI_VERSION:+=}${UNIFI_VERSION}${UNIFI_VERSION:+*} \
+    && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
-ADD install_unifi.sh /tmp/
-RUN apk --no-cache add --virtual build-dependencies wget dpkg tar
+WORKDIR /usr/lib/unifi
 
-RUN wget -q -O /tmp/unifi.deb http://dl.ubnt.com/unifi/${UNIFI_VERSION}/unifi_sysvinit_all.deb
-
-RUN /bin/sh /tmp/install_unifi.sh \
-  && apk --no-cache del build-dependencies \
-  && rm -rf /tmp/unifi.deb /tmp/install_unifi.sh
-
-COPY unifi.init /app/bin/unifi.init
+COPY unifi.init /root/unifi.init

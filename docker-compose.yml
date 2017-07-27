@@ -80,13 +80,13 @@ services:
         build:
             context: ./unifi/build
             args:
-                UNIFI_VERSION: 5.4.18
+                UNIFI_VERSION: 5.4.19
         restart: always
         ports:
             - "8080:8080" # INFORM
             - "3478:3478/udp" # STUN
         volumes:
-            - /storage/data/unifi:/app/data
+            - /storage/data/unifi:/usr/lib/unifi/data
         cpu_shares: 512
         logging:
             driver: gelf
