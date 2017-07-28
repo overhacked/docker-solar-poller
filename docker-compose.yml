@@ -25,7 +25,7 @@ services:
                 ipv6_address: 2001:559:80e5:d0:cc::fe
     bind:
         image: overhacked/bind-dnssec-slave
-        build: ./bind-slave/build
+        build: https://github.com/overhacked/bind-DNSSEC-slave.git#overhacked
         restart: always
         ports:
             - "${EXTERNAL_IP:-0.0.0.0}:53:53/udp"
@@ -42,7 +42,7 @@ services:
                 ipv6_address: 2001:559:80e5:d0:cc::53
     smtp:
         image: wader/postfix-relay
-        build: ./postfix/build
+        build: https://github.com/overhacked/postfix-relay.git#overhacked
         restart: always
         ports:
             - "25:25"
@@ -78,7 +78,7 @@ services:
     unifi:
         image: overhacked/unifi:openjdk
         build:
-            context: ./unifi/build
+            context: https://github.com/overhacked/docker-unifi-controller.git
             args:
                 UNIFI_VERSION: 5.4.19
         restart: always
@@ -94,7 +94,7 @@ services:
                 gelf-address: ${GELF_TARGET}
     transmission:
         image: overhacked/transmission-openvpn
-        build: ./transmission/build
+        build: https://github.com/overhacked/docker-transmission-openvpn.git#overhacked
         privileged: true
         restart: always
 #       ports:
@@ -161,7 +161,7 @@ services:
                 ipv6_address: 2001:559:80e5:d0:cc::5b
     zabbix-solar:
         image: overhacked/solar-poller:latest
-        build: ./solar-poller/build
+        build: https://github.com/overhacked/docker-solar-poller.git
         restart: always
         depends_on:
             - zabbix-server
@@ -172,7 +172,7 @@ services:
             SP_ZABBIX_SERVER: zabbix.server
     unifi-miner:
         image: overhacked/unifi-miner-proxy:latest
-        build: ./unifi/build-miner-proxy
+        build: https://github.com/overhacked/unifi_proxy.git#overhacked
         environment:
             MINER_UniFiLocation: https://unifi:8443
             MINER_UniFiVersion: v4
