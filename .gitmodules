@@ -1,9 +1,0 @@
-[submodule "transmission/build"]
-	path = transmission/build
-	url = https://github.com/haugene/docker-transmission-openvpn.git
-[submodule "bind-slave/build"]
-	path = bind-slave/build
-	url = https://github.com/unixtastic/bind-DNSSEC-slave
-[submodule "postfix/build"]
-	path = postfix/build
-	url = https://github.com/wader/postfix-relay.git
