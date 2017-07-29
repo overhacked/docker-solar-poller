@@ -8,11 +8,11 @@ services:
             - "80:80"
             - "443:443"
         volumes:
-            - "/storage/conf/docker/nginx/ssl:/etc/nginx/ssl:ro"
-            - "/storage/conf/docker/nginx/conf.d:/etc/nginx/conf.d:ro"
-            - "/storage/conf/docker/nginx/htpasswd:/etc/nginx/htpasswd:ro"
+            - "${CONFIG_ROOT:-.}/nginx/ssl:/etc/nginx/ssl:ro"
+            - "${CONFIG_ROOT:-.}/nginx/conf.d:/etc/nginx/conf.d:ro"
+            - "${CONFIG_ROOT:-.}/nginx/htpasswd:/etc/nginx/htpasswd:ro"
             - "/storage/mac/munki_repo:/srv/munki_repo:ro"
-            - "/storage/conf/docker/wpad:/srv/wpad:ro"
+            - "${CONFIG_ROOT:-.}/wpad:/srv/wpad:ro"
             - "/storage/backup/tcpdump:/tcpdump:rw"
             - "/var/cache/nginx"
         logging:
@@ -31,7 +31,7 @@ services:
             - "${EXTERNAL_IP:-0.0.0.0}:53:53/udp"
             - "${EXTERNAL_IP:-0.0.0.0}:53:53"
         volumes:
-            - "/storage/conf/docker/bind-slave/conf/named.conf:/etc/bind/named.conf.local:ro"
+            - "${CONFIG_ROOT:-.}/bind-slave/conf/named.conf:/etc/bind/named.conf.local:ro"
         logging:
             driver: gelf
             options:
@@ -47,9 +47,9 @@ services:
         ports:
             - "25:25"
         volumes:
-            - "/storage/conf/docker/postfix/dkim-keys:/etc/opendkim/keys"
-            - "/storage/conf/docker/postfix/ssl:/etc/postfix/ssl:ro"
-            - "/storage/conf/docker/postfix/opendkim.conf:/etc/opendkim.conf:ro"
+            - "${CONFIG_ROOT:-.}/postfix/dkim-keys:/etc/opendkim/keys"
+            - "${CONFIG_ROOT:-.}/postfix/ssl:/etc/postfix/ssl:ro"
+            - "${CONFIG_ROOT:-.}/postfix/opendkim.conf:/etc/opendkim.conf:ro"
             - /var/lib/postfix
             - /var/spool/postfix
             - /var/mail
@@ -139,9 +139,9 @@ services:
             - "10051:10051"
         volumes:
             - /etc/localtime:/etc/localtime:ro
-            - /storage/conf/docker/zabbix/etc/snmp:/etc/snmp:ro
-            - /storage/conf/docker/zabbix/mibs:/usr/share/snmp/mibs:ro
-            - /storage/conf/docker/zabbix/modules:/usr/lib/zabbix/modules:ro
+            - ${CONFIG_ROOT:-.}/zabbix/etc/snmp:/etc/snmp:ro
+            - ${CONFIG_ROOT:-.}/zabbix/mibs:/usr/share/snmp/mibs:ro
+            - ${CONFIG_ROOT:-.}/zabbix/modules:/usr/lib/zabbix/modules:ro
         links:
             - zabbix-db:zabbix.db
         environment:
@@ -194,7 +194,7 @@ services:
         volumes:
             - /storage/mac/swupdate/html:/reposado/html
             - /storage/mac/swupdate/metadata:/reposado/metadata
-            - /storage/conf/docker/reposado/preferences.plist:/reposado/code/preferences.plist
+            - ${CONFIG_ROOT:-.}/reposado/preferences.plist:/reposado/code/preferences.plist
     gitlist:
         image: davibe/gitlist-docker
         restart: always
@@ -207,8 +207,8 @@ services:
 #        ports:
 #            - "2055:2055/udp"
 #        volumes:
-#            - "/storage/conf/docker/ntopng/conf:/etc/ntopng:ro"
-#            - "/storage/conf/docker/ntopng/data:/var/lib/redis:rw"
+#            - "${CONFIG_ROOT:-.}/ntopng/conf:/etc/ntopng:ro"
+#            - "${CONFIG_ROOT:-.}/ntopng/data:/var/lib/redis:rw"
 #        logging:
 #            driver: gelf
 #            options:
