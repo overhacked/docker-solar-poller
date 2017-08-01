@@ -10,4 +10,4 @@ for e in ${!MINER_*}; do echo "${e:6}=${!e}" >> "${config_file}.new"; done
 mv "${config_file}.new" "$config_file"
 
 # Start unifi_proxy
-exec /app/unifi_proxy.pl -C "$config_file"
+exec perl /app/unifi_proxy.pl -C "$config_file"
