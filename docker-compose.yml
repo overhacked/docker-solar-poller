@@ -11,9 +11,9 @@ services:
             - "${CONFIG_ROOT:-.}/nginx/ssl:/etc/nginx/ssl:ro"
             - "${CONFIG_ROOT:-.}/nginx/conf.d:/etc/nginx/conf.d:ro"
             - "${CONFIG_ROOT:-.}/nginx/htpasswd:/etc/nginx/htpasswd:ro"
-            - "/storage/mac/munki_repo:/srv/munki_repo:ro"
+            - "/mnt/storage/mac/munki_repo:/srv/munki_repo:ro"
             - "${CONFIG_ROOT:-.}/wpad:/srv/wpad:ro"
-            - "/storage/backup/tcpdump:/tcpdump:rw"
+            - "/mnt/storage/backup/tcpdump:/tcpdump:rw"
             - "/var/cache/nginx"
         logging:
             driver: gelf
@@ -80,13 +80,13 @@ services:
         build:
             context: https://github.com/overhacked/docker-unifi-controller.git
             args:
-                UNIFI_VERSION: 5.4.19
+                UNIFI_VERSION: 5.5.20
         restart: always
         ports:
             - "8080:8080" # INFORM
             - "3478:3478/udp" # STUN
         volumes:
-            - /storage/data/unifi:/usr/lib/unifi/data
+            - /mnt/storage/data/unifi:/usr/lib/unifi/data
         cpu_shares: 512
         logging:
             driver: gelf
@@ -105,7 +105,7 @@ services:
             - 8.8.4.4
         volumes:
             - /data/transmission-home
-            - "/storage/export/downloads:/data"
+            - "/mnt/storage/export/downloads:/data"
             - "/etc/localtime:/etc/localtime:ro"
         environment:
             - OPENVPN_PROVIDER=PIA
@@ -120,8 +120,8 @@ services:
         image: monitoringartist/zabbix-db-mariadb
         restart: always
         volumes:
-            - /storage/data/zabbix:/var/lib/mysql
-            - /storage/backup/docker/zabbix:/backups
+            - /mnt/storage/data/zabbix:/var/lib/mysql
+            - /mnt/storage/backup/docker/zabbix:/backups
             - /etc/localtime:/etc/localtime:ro
         environment:
             - MARIADB_USER=zabbix
@@ -142,15 +142,17 @@ services:
             - ${CONFIG_ROOT:-.}/zabbix/etc/snmp:/etc/snmp:ro
             - ${CONFIG_ROOT:-.}/zabbix/mibs:/usr/share/snmp/mibs:ro
             - ${CONFIG_ROOT:-.}/zabbix/modules:/usr/lib/zabbix/modules:ro
-        links:
-            - zabbix-db:zabbix.db
         environment:
-            - ZS_DBHost=zabbix.db
+            - ZS_DBHost=zabbix-db
             - ZS_DBUser=zabbix
             - ZS_DBPassword=otWocnv4fmeA3r
             - ZS_StartIPMIPollers=2
             - ZS_LoadModulePath=/usr/lib/zabbix/modules
             - ZS_LoadModule=unifi.so
+            - "XXL_api=false"
+            - "XXL_grapher=true"
+            - "XXL_searcher=false"
+            - "XXL_analytics=false"
         logging:
             driver: gelf
             options:
@@ -172,7 +174,7 @@ services:
             SP_ZABBIX_SERVER: zabbix.server
     unifi-miner:
         image: overhacked/unifi-miner-proxy:latest
-        build: https://github.com/overhacked/unifi_proxy.git#overhacked
+        build: unifi/build-miner-proxy
         environment:
             MINER_UniFiLocation: https://unifi:8443
             MINER_UniFiVersion: v4
@@ -192,14 +194,14 @@ services:
         environment:
             - LOCALCATALOGURLBASE="https://updates.manyfoldfarm.com:443"
         volumes:
-            - /storage/mac/swupdate/html:/reposado/html
-            - /storage/mac/swupdate/metadata:/reposado/metadata
+            - /mnt/storage/mac/swupdate/html:/reposado/html
+            - /mnt/storage/mac/swupdate/metadata:/reposado/metadata
             - ${CONFIG_ROOT:-.}/reposado/preferences.plist:/reposado/code/preferences.plist
     gitlist:
         image: davibe/gitlist-docker
         restart: always
         volumes:
-            - /storage/repos:/repos
+            - /mnt/storage/repos:/repos
 #    ntop:
 #        build: ./ntopng/build
 #        image: overhacked/ntopng-nprobe:latest
@@ -217,20 +219,28 @@ services:
         image: "mongo:3.4.4"
         restart: always
         volumes:
-            - /storage/data/graylog/mongo:/data/db
+            - /mnt/storage/data/graylog/mongo:/data/db
     elasticsearch-graylog:
-        image: "elasticsearch:2"
+        image: "overhacked/elasticsearch:2"
+        build: graylog/elasticsearch/build
         restart: always
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+        mem_limit: 1g
+        environment:
+            ES_JAVA_OPTS: -Xms512m -Xmx512m
         volumes:
-            - /storage/data/graylog/elasticsearch:/usr/share/elasticsearch/data
+            - /mnt/storage/data/graylog/elasticsearch:/usr/share/elasticsearch/data
         command: "elasticsearch -Des.cluster.name='graylog'"
     graylog:
         image: graylog2/server:2.2.3-1
         restart: always
         volumes:
-            - /storage/data/graylog/journal:/usr/share/graylog/data/journal
-            - /storage/conf/graylog:/usr/share/graylog/data/config:ro
-            - /storage/data/graylog/plugin/graylog-plugin-netflow-0.1.1.jar:/usr/share/graylog/plugin/graylog-plugin-netflow-0.1.1.jar:ro
+            - /mnt/storage/data/graylog/journal:/usr/share/graylog/data/journal
+            - /mnt/storage/conf/graylog:/usr/share/graylog/data/config:ro
+            - /mnt/storage/data/graylog/plugin/graylog-plugin-netflow-0.1.1.jar:/usr/share/graylog/plugin/graylog-plugin-netflow-0.1.1.jar:ro
         environment:
             - GRAYLOG_SERVER_JAVA_OPTS=-Xmx4096m
         links:
@@ -255,7 +265,7 @@ networks:
         driver: macvlan
         enable_ipv6: true
         driver_opts:
-            parent: enp4s0f0
+            parent: ${EXTERNAL_IF}
         ipam:
             config:
                 - subnet: 50.207.215.128/29
