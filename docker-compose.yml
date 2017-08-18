@@ -171,11 +171,9 @@ services:
         restart: always
         depends_on:
             - zabbix-server
-        links:
-            - zabbix-server:zabbix.server
         environment:
             SP_EGAUGE_URI: http://solar-gauge.res.sineya.org/cgi-bin/egauge?v1&inst&tot
-            SP_ZABBIX_SERVER: zabbix.server
+            SP_ZABBIX_SERVER: zabbix-server
     unifi-miner:
         image: overhacked/unifi-miner-proxy:latest
         build: unifi/build-miner-proxy
