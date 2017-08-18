@@ -142,11 +142,13 @@ services:
             - ${CONFIG_ROOT:-.}/zabbix/etc/snmp:/etc/snmp:ro
             - ${CONFIG_ROOT:-.}/zabbix/mibs:/usr/share/snmp/mibs:ro
             - ${CONFIG_ROOT:-.}/zabbix/modules:/usr/lib/zabbix/modules:ro
+            - ${CONFIG_ROOT:-.}/zabbix/alertscripts:/usr/local/share/zabbix/alertscripts:ro
         environment:
             - ZS_DBHost=zabbix-db
             - ZS_DBUser=zabbix
             - ZS_DBPassword=otWocnv4fmeA3r
             - ZS_StartIPMIPollers=2
+            - ZS_AlertScriptsPath=/usr/local/share/zabbix/alertscripts
             - ZS_LoadModulePath=/usr/lib/zabbix/modules
             - ZS_LoadModule=unifi.so
             - "XXL_api=false"
