@@ -11,9 +11,9 @@ services:
             - "${CONFIG_ROOT:-.}/nginx/ssl:/etc/nginx/ssl:ro"
             - "${CONFIG_ROOT:-.}/nginx/conf.d:/etc/nginx/conf.d:ro"
             - "${CONFIG_ROOT:-.}/nginx/htpasswd:/etc/nginx/htpasswd:ro"
-            - "/mnt/storage/mac/munki_repo:/srv/munki_repo:ro"
+            - "/storage/mac/munki_repo:/srv/munki_repo:ro"
             - "${CONFIG_ROOT:-.}/wpad:/srv/wpad:ro"
-            - "/mnt/storage/backup/tcpdump:/tcpdump:rw"
+            - "/storage/backup/tcpdump:/tcpdump:rw"
             - "/var/cache/nginx"
         logging:
             driver: gelf
@@ -86,7 +86,7 @@ services:
             - "8080:8080" # INFORM
             - "3478:3478/udp" # STUN
         volumes:
-            - /mnt/storage/data/unifi:/usr/lib/unifi/data
+            - /storage/data/unifi:/usr/lib/unifi/data
         cpu_shares: 512
         logging:
             driver: gelf
@@ -105,7 +105,7 @@ services:
             - 8.8.4.4
         volumes:
             - /data/transmission-home
-            - "/mnt/storage/export/downloads:/data"
+            - "/storage/export/downloads:/data"
             - "/etc/localtime:/etc/localtime:ro"
         environment:
             - OPENVPN_PROVIDER=PIA
@@ -120,8 +120,8 @@ services:
         image: monitoringartist/zabbix-db-mariadb
         restart: always
         volumes:
-            - /mnt/storage/data/zabbix:/var/lib/mysql
-            - /mnt/storage/backup/docker/zabbix:/backups
+            - /storage/data/zabbix:/var/lib/mysql
+            - /storage/backup/docker/zabbix:/backups
             - /etc/localtime:/etc/localtime:ro
         environment:
             - MARIADB_USER=zabbix
@@ -196,14 +196,14 @@ services:
         environment:
             - LOCALCATALOGURLBASE="https://updates.manyfoldfarm.com:443"
         volumes:
-            - /mnt/storage/mac/swupdate/html:/reposado/html
-            - /mnt/storage/mac/swupdate/metadata:/reposado/metadata
+            - /storage/mac/swupdate/html:/reposado/html
+            - /storage/mac/swupdate/metadata:/reposado/metadata
             - ${CONFIG_ROOT:-.}/reposado/preferences.plist:/reposado/code/preferences.plist
     gitlist:
         image: davibe/gitlist-docker
         restart: always
         volumes:
-            - /mnt/storage/repos:/repos
+            - /storage/repos:/repos
 #    ntop:
 #        build: ./ntopng/build
 #        image: overhacked/ntopng-nprobe:latest
@@ -221,7 +221,7 @@ services:
         image: "mongo:3.4.4"
         restart: always
         volumes:
-            - /mnt/storage/data/graylog/mongo:/data/db
+            - /storage/data/graylog/mongo:/data/db
     elasticsearch-graylog:
         image: "overhacked/elasticsearch:2"
         build: graylog/elasticsearch/build
@@ -234,15 +234,15 @@ services:
         environment:
             ES_JAVA_OPTS: -Xms512m -Xmx512m
         volumes:
-            - /mnt/storage/data/graylog/elasticsearch:/usr/share/elasticsearch/data
+            - /storage/data/graylog/elasticsearch:/usr/share/elasticsearch/data
         command: "elasticsearch -Des.cluster.name='graylog'"
     graylog:
         image: graylog2/server:2.2.3-1
         restart: always
         volumes:
-            - /mnt/storage/data/graylog/journal:/usr/share/graylog/data/journal
-            - /mnt/storage/conf/graylog:/usr/share/graylog/data/config:ro
-            - /mnt/storage/data/graylog/plugin/graylog-plugin-netflow-0.1.1.jar:/usr/share/graylog/plugin/graylog-plugin-netflow-0.1.1.jar:ro
+            - /storage/data/graylog/journal:/usr/share/graylog/data/journal
+            - /storage/conf/graylog:/usr/share/graylog/data/config:ro
+            - /storage/data/graylog/plugin/graylog-plugin-netflow-0.1.1.jar:/usr/share/graylog/plugin/graylog-plugin-netflow-0.1.1.jar:ro
         environment:
             - GRAYLOG_SERVER_JAVA_OPTS=-Xmx4096m
         links:
