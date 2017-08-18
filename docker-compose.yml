@@ -147,10 +147,12 @@ services:
             - ZS_DBHost=zabbix-db
             - ZS_DBUser=zabbix
             - ZS_DBPassword=otWocnv4fmeA3r
-            - ZS_StartIPMIPollers=2
+            - ZS_StartPollers=8
+            - ZS_StartIPMIPollers=1
             - ZS_AlertScriptsPath=/usr/local/share/zabbix/alertscripts
             - ZS_LoadModulePath=/usr/lib/zabbix/modules
             - ZS_LoadModule=unifi.so
+            - ZS_ValueCacheSize=128M
             - "XXL_api=false"
             - "XXL_grapher=true"
             - "XXL_searcher=false"
