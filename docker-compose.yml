@@ -179,7 +179,7 @@ services:
         build: unifi/build-miner-proxy
         environment:
             MINER_UniFiLocation: https://unifi:8443
-            MINER_UniFiVersion: v4
+            MINER_UniFiVersion: v5
             MINER_UniFiUser: stat
             MINER_UniFiPass: stat
             MINER_DebugLevel: 1
