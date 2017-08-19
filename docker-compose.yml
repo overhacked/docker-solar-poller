@@ -177,6 +177,7 @@ services:
     unifi-miner:
         image: overhacked/unifi-miner-proxy:latest
         build: unifi/build-miner-proxy
+        cpu_shares: 256
         environment:
             MINER_UniFiLocation: https://unifi:8443
             MINER_UniFiVersion: v5
