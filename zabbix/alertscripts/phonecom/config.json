@@ -1,0 +1,10 @@
+{
+  "config": [
+    {
+      "type" : "main",
+      "apiKeyPrefix" : "Bearer",
+      "apiKey" : "towyczHH25VxAdHYlKXNeXeg8EyDRZmsFkM8y2QlD1OeLeRq",
+      "accountId" : 14404
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+API Response:
+
+{
+  "@controls": {
+    "parent": {
+      "href": "https://api.phone.com/v4/accounts/14404/sms",
+      "schemaUrl": "https://api.phone.com/v4/inputs/list-account-sms"
+    },
+    "self": {
+      "encoding": "json",
+      "href": "https://api.phone.com/v4/accounts/14404/sms",
+      "method": "POST",
+      "schemaUrl": "https://api.phone.com/v4/inputs/create-account-sms"
+    }
+  },
+  "@meta": {
+    "@controls": {
+      "profile": {
+        "href": "https://api.phone.com/v4/docs/create-account-sms"
+      }
+    }
+  },
+  "@namespaces": {
+    "phonedotcom": {
+      "name": "https://api.phone.com/v4/docs/"
+    }
+  },
+  "created_at": "2017-08-23T17:26:10+00:00",
+  "created_epoch": 1503509170,
+  "direction": "out",
+  "extension": {
+    "extension": 500,
+    "id": 61664,
+    "name": "Default extension",
+    "voip_id": 14404
+  },
+  "from": "+17704630677",
+  "is_new": true,
+  "text": "Hello, world, again!",
+  "to": [
+    {
+      "id": "7addd336bcfd6332dd7da619dd83c34071f4bfe7",
+      "number": "+14044349194",
+      "status": "sent"
+    }
+  ]
+}
