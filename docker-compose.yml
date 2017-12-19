@@ -303,21 +303,21 @@ services:
         volumes:
             - /storage/data/graylog/elasticsearch:/usr/share/elasticsearch/data
     graylog:
-        image: graylog2/server:2.2.3-1
+        image: graylog2/server:2.3.2-2
         restart: always
         volumes:
             - /storage/data/graylog/journal:/usr/share/graylog/data/journal
             - /storage/conf/graylog:/usr/share/graylog/data/config:ro
-            - /storage/data/graylog/plugin/graylog-plugin-netflow-0.1.1.jar:/usr/share/graylog/plugin/graylog-plugin-netflow-0.1.1.jar:ro
+            #- /storage/data/graylog/plugin/graylog-plugin-netflow-0.1.1.jar:/usr/share/graylog/plugin/graylog-plugin-netflow-0.1.1.jar:ro
+        mem_limit: 6g
         environment:
             - GRAYLOG_SERVER_JAVA_OPTS=-Xmx4096m
         links:
             - mongo-db:mongo
             - elasticsearch-graylog:elasticsearch
         ports:
-            - "12201:12201/udp"
+            - "12201-12202:12201-12202/udp"
             - "1514-1524:1514-1524/udp"
-            - "2055:2055/udp"
 networks:
     default:
         driver: bridge
