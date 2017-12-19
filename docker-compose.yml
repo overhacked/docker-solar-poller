@@ -2,7 +2,7 @@
 version: '2.3'
 services:
     frontend:
-        image: nginx
+        image: nginx:mainline-alpine
         restart: always
         ports:
             - "80:80"
