@@ -277,6 +277,10 @@ services:
 #                gelf-address: ${GELF_TARGET}
     mongo-db:
         image: "mongo:3.4.4"
+        # Keep the cache size very low, because this is mostly a write-only DB
+        # Reads only happen when stats queries are made via UniFi controller,
+        # and we don't mind if those are a bit slow
+        command: "mongod --wiredTigerCacheSizeGB 1.0"
         restart: always
         volumes:
             - /storage/data/graylog/mongo:/data/db
