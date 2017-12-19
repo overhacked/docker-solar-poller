@@ -128,8 +128,10 @@ services:
         restart: always
         volumes:
             - /storage/data/zabbix:/var/lib/mysql
+            - /storage/data/zabbix/ib_log:/var/lib/mysql/ib_log
             - /storage/backup/docker/zabbix:/backups
             - /etc/localtime:/etc/localtime:ro
+            - /storage/conf/zabbix-db/etc/custom-config:/etc/custom-config:ro
         environment:
             - MARIADB_USER=zabbix
             - MARIADB_PASS=otWocnv4fmeA3r
