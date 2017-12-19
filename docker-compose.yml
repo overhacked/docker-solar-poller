@@ -204,12 +204,13 @@ services:
             - "5556:8080"
     zabbix-solar:
         image: overhacked/solar-poller:latest
-        build: https://github.com/overhacked/docker-solar-poller.git
+#build: https://github.com/overhacked/docker-solar-poller.git
+        build: ./solar-poller/build
         restart: always
         depends_on:
             - zabbix-server
         environment:
-            SP_EGAUGE_URI: http://solar-gauge.res.sineya.org/cgi-bin/egauge?v1&inst&tot
+            SP_EGAUGE_URI: http://zabbix:zabbix@solar-gauge.res.sineya.org/cgi-bin/egauge?v1&inst&tot
             SP_ZABBIX_SERVER: zabbix-server
     unifi-miner:
         image: overhacked/unifi-miner-proxy:latest
