@@ -1,7 +1,7 @@
 #!/bin/sh
-COMPOSE_BIN='/usr/local/bin/docker-compose'
+COMPOSE_BIN="$HOME/.local/bin/docker-compose"
 COMPOSE_FILE=${COMPOSE_FILE:-/storage/conf/docker/docker-compose.yml}
-CONTAINER_VERSION_FILE='/app/webapps/ROOT/app-unifi/.version'
+CONTAINER_VERSION_FILE='/usr/lib/unifi/webapps/ROOT/app-unifi/.version'
 UNIFI_DATASET='storage/data/unifi'
 MONGO_DATASET='storage/data/graylog/mongo'
 
@@ -46,7 +46,7 @@ TARGET_VERSION="$1"
 CURRENT_VERSION=`$COMPOSE_BIN exec $SERVICE awk -F. '{OFS=".";ORS=""; print $1,$2,$3}' "$CONTAINER_VERSION_FILE"`
 
 if [ "$TARGET_VERSION" = "`printf '%s\n%s' $TARGET_VERSION $CURRENT_VERSION | sort -V | head -n1`" ]; then
-    printf 'Specified version (%s) is less than or equal to installed version (%s)\n' $TARGET_VERSION $CURRENT_VERSION
+    printf 'Specified version (%s) is less than or equal to installed version (%s)\n' "$TARGET_VERSION" "$CURRENT_VERSION"
     exit 1;
 fi
 
@@ -91,7 +91,7 @@ succeed
 attempt "Removing existing $SERVICE container(s) and volume(s)"
 $DRY_RUN $COMPOSE_BIN rm -fv $SERVICE || { echo "Could not remove container(s) and volume(s) for service '$SERVICE'."; exit 1; }
 succeed
-$DRY_RUN $COMPOSE_BIN build $SERVICE || { echo "Could not build image for service '$SERVICE'."; exit 1; }
+$DRY_RUN $COMPOSE_BIN build --build-arg UNIFI_DEB_URL="$UNIFI_URL" $SERVICE || { echo "Could not build image for service '$SERVICE'."; exit 1; }
 $DRY_RUN $COMPOSE_BIN create $SERVICE || { echo "Could not create container(s) for service '$SERVICE'."; exit 1; }
 $DRY_RUN $COMPOSE_BIN start $SERVICE || { echo "Could not start service '$SERVICE'."; exit 1; }
 
