@@ -82,11 +82,12 @@ services:
                 ipv4_address: 172.16.243.253
                 ipv6_address: 2001:559:80e5:d0:cc::25
     unifi:
-        image: overhacked/unifi:openjdk
+        image: overhacked/unifi:latest
         build:
-            context: https://github.com/overhacked/docker-unifi-controller.git
+            #context: https://github.com/overhacked/docker-unifi-controller.git
+            context: unifi/build
             args:
-                UNIFI_VERSION: 5.5.20
+                UNIFI_VERSION: 5.6.19
         restart: always
         ports:
             - "8080:8080" # INFORM
