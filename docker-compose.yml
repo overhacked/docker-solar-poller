@@ -140,7 +140,7 @@ services:
             options:
                 gelf-address: ${GELF_TARGET}
     zabbix-server:
-        image: monitoringartist/zabbix-xxl:latest
+        image: monitoringartist/dockbix-xxl:3.4.4
         restart: always
         depends_on:
             - zabbix-db
@@ -152,17 +152,26 @@ services:
             - ${CONFIG_ROOT:-.}/zabbix/mibs:/usr/share/snmp/mibs:ro
             - ${CONFIG_ROOT:-.}/zabbix/modules:/usr/lib/zabbix/modules:ro
             - ${CONFIG_ROOT:-.}/zabbix/alertscripts:/usr/local/share/zabbix/alertscripts:ro
+            - ${CONFIG_ROOT:-.}/zabbix/externalscripts:/usr/local/share/zabbix/externalscripts:ro
+            - ${CONFIG_ROOT:-.}/zabbix/etc/nginx/hosts.d/default.conf:/etc/nginx/hosts.d/default.conf:ro
+            - "/storage/backup/tcpdump:/tcpdump:rw"
         environment:
             - ZS_DBHost=zabbix-db
             - ZS_DBUser=zabbix
             - ZS_DBPassword=otWocnv4fmeA3r
+            - ZS_Timeout=18
+            - ZS_StartDiscoverers=2
             - ZS_StartPollers=8
+            - ZS_StartPingers=3
             - ZS_StartIPMIPollers=1
             - ZS_AlertScriptsPath=/usr/local/share/zabbix/alertscripts
+            - ZS_ExternalScripts=/usr/local/share/zabbix/externalscripts
             - ZS_LoadModulePath=/usr/lib/zabbix/modules
-            - ZS_LoadModule=unifi.so
+            - ZS_LoadModule_1=libzbxmodbus.so
+            #- ZS_LoadModule_2=unifi.so
             - ZS_ValueCacheSize=128M
             - "XXL_api=false"
+            - "XXL_zapix=true"
             - "XXL_grapher=true"
             - "XXL_searcher=false"
             - "XXL_analytics=false"
