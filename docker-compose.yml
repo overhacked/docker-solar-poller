@@ -246,6 +246,22 @@ services:
         restart: always
         volumes:
             - /storage/repos:/repos
+#    nfsen:
+#        build: ./nfsen/build
+#        image: overhacked/nfsen:latest
+#        restart: always
+#        ports:
+#            - "2055:2055/udp"
+#        environment:
+#            TZ: America/New_York
+#            LOGLEVEL: 6
+#        volumes:
+#            - "/storage/data/nfsen/profiles-data:/data/nfsen/profiles-data:rw"
+#            - "/storage/stat/nfsen/profiles-stat:/stat/nfsen/profiles-stat:rw"
+#        logging:
+#            driver: gelf
+#            options:
+#                gelf-address: ${GELF_TARGET}
 #    ntop:
 #        build: ./ntopng/build
 #        image: overhacked/ntopng-nprobe:latest
