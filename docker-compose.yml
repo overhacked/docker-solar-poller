@@ -285,19 +285,23 @@ services:
         volumes:
             - /storage/data/graylog/mongo:/data/db
     elasticsearch-graylog:
-        image: "overhacked/elasticsearch:2"
-        build: graylog/elasticsearch/build
+        image: "docker.elastic.co/elasticsearch/elasticsearch:5.6.4"
         restart: always
         ulimits:
             memlock:
                 soft: -1
                 hard: -1
-        mem_limit: 1g
+        mem_limit: 10g
         environment:
-            ES_JAVA_OPTS: -Xms512m -Xmx512m
+            cluster.name: graylog
+            bootstrap.memory_lock: "true"
+            http.host: 0.0.0.0
+            transport.host: localhost
+            network.host: 0.0.0.0
+            xpack.security.enabled: "false"
+            ES_JAVA_OPTS: -Xms8g -Xmx8g
         volumes:
             - /storage/data/graylog/elasticsearch:/usr/share/elasticsearch/data
-        command: "elasticsearch -Des.cluster.name='graylog'"
     graylog:
         image: graylog2/server:2.2.3-1
         restart: always
