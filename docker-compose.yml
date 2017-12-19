@@ -214,7 +214,10 @@ services:
             SP_ZABBIX_SERVER: zabbix-server
     unifi-miner:
         image: overhacked/unifi-miner-proxy:latest
+        restart: always
         build: unifi/build-miner-proxy
+        ports:
+            - "8448:8448"
         cpu_shares: 256
         environment:
             MINER_UniFiLocation: https://unifi:8443
