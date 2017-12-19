@@ -191,6 +191,17 @@ services:
                 ZM_GIT_REPO: https://github.com/overhacked/zabbix-monitor.git
                 ZM_GIT_BRANCH: overhacked
         restart: always
+    zabbix-infinias:
+        image: overhacked/iaevents-listener:latest
+        restart: always
+        build:
+            context: zabbix-infinias/build
+        init: true
+        environment:
+            INF_ZABBIX_SERVER: zabbix-server
+            INF_ZABBIX_HOSTNAME: access.sec.res.sineya.org
+        ports:
+            - "5556:8080"
     zabbix-solar:
         image: overhacked/solar-poller:latest
         build: https://github.com/overhacked/docker-solar-poller.git
