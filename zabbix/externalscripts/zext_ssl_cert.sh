@@ -44,7 +44,7 @@ if [ -n "$end_date" ]
 then
     end_date_seconds=`date '+%s' --date "$end_date"`
     now_seconds=`date '+%s'`
-    echo "($end_date_seconds-$now_seconds)/24/3600" | bc
+    echo "$(( ( $end_date_seconds - $now_seconds ) / 24 / 3600 ))"
 fi
 ;;
 
