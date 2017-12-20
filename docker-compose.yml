@@ -1,6 +1,21 @@
 # vim: et:ts=4:sw=4
 version: '2.3'
 services:
+    registry:
+        restart: always
+        image: registry:2
+        ports:
+            - 5000:5000
+        environment:
+            REGISTRY_HTTP_TLS_CERTIFICATE: /certs/WILDCARD.sineya.org.bundle.crt
+            REGISTRY_HTTP_TLS_KEY: /certs/WILDCARD.sineya.org.key
+            REGISTRY_AUTH: htpasswd
+            REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+            REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+        volumes:
+            - /storage/data/docker-registry:/var/lib/registry
+            - "${CONFIG_ROOT:-.}/nginx/ssl:/certs:ro"
+            - "${CONFIG_ROOT:-.}/nginx/htpasswd:/auth/htpasswd:ro"
     frontend:
         image: nginx:mainline-alpine
         restart: always
@@ -26,7 +41,7 @@ services:
                 ipv4_address: 172.16.243.254
                 ipv6_address: 2001:559:80e5:d0:cc::fe
     bind:
-        image: overhacked/bind-dnssec-slave
+        image: registry.sineya.org:5000/bind-dnssec-slave
         build: https://github.com/overhacked/bind-DNSSEC-slave.git#overhacked
         restart: always
         ports:
@@ -43,7 +58,7 @@ services:
                 ipv4_address: 172.16.243.250
                 ipv6_address: 2001:559:80e5:d0:cc::53
     smtp:
-        image: wader/postfix-relay
+        image: registry.sineya.org:5000/postfix-relay
         build: https://github.com/overhacked/postfix-relay.git#overhacked
         restart: always
         ports:
@@ -82,12 +97,12 @@ services:
                 ipv4_address: 172.16.243.253
                 ipv6_address: 2001:559:80e5:d0:cc::25
     unifi:
-        image: overhacked/unifi:latest
+        image: registry.sineya.org:5000/unifi:latest
         build:
             #context: https://github.com/overhacked/docker-unifi-controller.git
             context: unifi/build
-            args:
-                UNIFI_VERSION: 5.6.19
+#            args:
+#                UNIFI_VERSION: 5.6.19
         restart: always
         ports:
             - "8080:8080" # INFORM
@@ -100,7 +115,7 @@ services:
             options:
                 gelf-address: ${GELF_TARGET}
 #    transmission:
-#        image: overhacked/transmission-openvpn
+#        image: registry.sineya.org:5000/transmission-openvpn
 #        build: https://github.com/overhacked/docker-transmission-openvpn.git#overhacked
 #        privileged: true
 #        restart: always
@@ -184,7 +199,7 @@ services:
                 ipv4_address: 172.16.243.251
                 ipv6_address: 2001:559:80e5:d0:cc::5b
     zabbix-monitor:
-        image: overhacked/zabbix-monitor:latest
+        image: registry.sineya.org:5000/zabbix-monitor:latest
         build:
             context: zabbix-monitor/build
             args:
@@ -192,7 +207,7 @@ services:
                 ZM_GIT_BRANCH: overhacked
         restart: always
     zabbix-infinias:
-        image: overhacked/iaevents-listener:latest
+        image: registry.sineya.org:5000/iaevents-listener:latest
         restart: always
         build:
             context: zabbix-infinias/build
@@ -203,7 +218,7 @@ services:
         ports:
             - "5556:8080"
     zabbix-solar:
-        image: overhacked/solar-poller:latest
+        image: registry.sineya.org:5000/solar-poller:latest
 #build: https://github.com/overhacked/docker-solar-poller.git
         build: ./solar-poller/build
         restart: always
@@ -213,7 +228,7 @@ services:
             SP_EGAUGE_URI: http://zabbix:zabbix@solar-gauge.res.sineya.org/cgi-bin/egauge?v1&inst&tot
             SP_ZABBIX_SERVER: zabbix-server
     unifi-miner:
-        image: overhacked/unifi-miner-proxy:latest
+        image: registry.sineya.org:5000/unifi-miner-proxy:latest
         restart: always
         build: unifi/build-miner-proxy
         ports:
@@ -231,7 +246,7 @@ services:
 #            options:
 #                tag: unifi-miner
     reposado:
-        #image: macadmins/reposado
+        image: registry.sineya.org:5000/reposado
         build:
             context: https://github.com/overhacked/docker-reposado.git#uwsgi-nginx
         restart: always
@@ -248,7 +263,7 @@ services:
             - /storage/repos:/repos
 #    nfsen:
 #        build: ./nfsen/build
-#        image: overhacked/nfsen:latest
+#        image: registry.sineya.org:5000/nfsen:latest
 #        restart: always
 #        ports:
 #            - "2055:2055/udp"
@@ -264,7 +279,7 @@ services:
 #                gelf-address: ${GELF_TARGET}
 #    ntop:
 #        build: ./ntopng/build
-#        image: overhacked/ntopng-nprobe:latest
+#        image: registry.sineya.org:5000/ntopng-nprobe:latest
 #        restart: always
 #        ports:
 #            - "2055:2055/udp"
