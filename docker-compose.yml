@@ -40,6 +40,14 @@ services:
             default:
                 ipv4_address: 172.16.243.254
                 ipv6_address: 2001:559:80e5:d0:cc::fe
+    browsepy:
+        image: blankdots/docker-browsepy
+        restart: always
+        volumes:
+            - /mnt/media:/files
+        environment:
+            GOSU_USER: nobody:nobody
+            GOSU_CHOWN: ""
     bind:
         image: registry.sineya.org:5000/bind-dnssec-slave
         build: https://github.com/overhacked/bind-DNSSEC-slave.git#overhacked
@@ -48,7 +56,8 @@ services:
             - "${EXTERNAL_IP:-0.0.0.0}:53:53/udp"
             - "${EXTERNAL_IP:-0.0.0.0}:53:53"
         volumes:
-            - "${CONFIG_ROOT:-.}/bind-slave/conf/named.conf:/etc/bind/named.conf.local:ro"
+            - "${CONFIG_ROOT:-.}/bind-slave/conf/named.conf.local:/etc/bind/named.conf.local:ro"
+            - "${CONFIG_ROOT:-.}/bind-slave/conf/named.conf.options:/etc/bind/named.conf.options:ro"
         logging:
             driver: gelf
             options:
@@ -101,8 +110,8 @@ services:
         build:
             #context: https://github.com/overhacked/docker-unifi-controller.git
             context: unifi/build
-#            args:
-#                UNIFI_VERSION: 5.6.19
+            args:
+                UNIFI_VERSION: 5.6.30
         restart: always
         ports:
             - "8080:8080" # INFORM
@@ -155,7 +164,7 @@ services:
             options:
                 gelf-address: ${GELF_TARGET}
     zabbix-server:
-        image: monitoringartist/dockbix-xxl:3.4.4
+        image: monitoringartist/dockbix-xxl:3.4.7
         restart: always
         depends_on:
             - zabbix-db
@@ -177,8 +186,9 @@ services:
             - ZS_Timeout=18
             - ZS_StartDiscoverers=2
             - ZS_StartPollers=8
-            - ZS_StartPingers=3
+            - ZS_StartPollersUnreachable=4
             - ZS_StartIPMIPollers=1
+            - ZS_StartPingers=3
             - ZS_AlertScriptsPath=/usr/local/share/zabbix/alertscripts
             - ZS_ExternalScripts=/usr/local/share/zabbix/externalscripts
             - ZS_LoadModulePath=/usr/lib/zabbix/modules
@@ -333,6 +343,25 @@ services:
         ports:
             - "12201-12202:12201-12202/udp"
             - "1514-1524:1514-1524/udp"
+            - "5044:5044/tcp"
+#    micromdm:
+#        image: registry.sineya.org:5000/micromdm
+#        build:
+#            #context: https://github.com/overhacked/micromdm-docker.git
+#            context: ./micromdm/build
+#        restart: always
+#        init: true
+#        environment:
+#            MM_APNS_PASSWORD: ablk36da
+#            MM_SERVER_LISTEN: ":8080"
+#            MM_SERVER_TLS: "false"
+#            MM_SERVER_URL: "https://mdm.sineya.org"
+#            MM_SERVER_DEBUG: "true"
+#        volumes:
+#            - /storage/conf/docker/micromdm/conf:/conf:ro
+#            - /storage/data/micromdm/db:/var/db/micromdm
+#            - /storage/data/micromdm/pkgs:/data
+        
 networks:
     default:
         driver: bridge
