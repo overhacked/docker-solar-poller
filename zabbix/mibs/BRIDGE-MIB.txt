@@ -1,3 +1,21 @@
+--
+-- Copyright (C) The Internet Society (2005).
+--
+-- This document is subject to the rights, licenses and restrictions
+-- contained in BCP 78, and except as set forth therein, the authors
+-- retain all their rights.
+--
+-- This document and the information contained herein are provided on an
+-- "AS IS" basis and THE CONTRIBUTOR, THE ORGANIZATION HE/SHE REPRESENTS
+-- OR IS SPONSORED BY (IF ANY), THE INTERNET SOCIETY AND THE INTERNET
+-- ENGINEERING TASK FORCE DISCLAIM ALL WARRANTIES, EXPRESS OR IMPLIED,
+-- INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE
+-- INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED
+-- WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+--
+-- $FreeBSD$
+--
+
 BRIDGE-MIB DEFINITIONS ::= BEGIN
 
 -- ---------------------------------------------------------- --
@@ -26,7 +44,6 @@ dot1dBridge MODULE-IDENTITY
           Email: kenyon.c.norseth@L-3com.com
          Postal: 640 N. 2200 West.
                  Salt Lake City, Utah 84116-0850
-
                  Les Bell (Editor)
                  3Com Europe Limited
           Phone: +44 1442 438025
@@ -68,6 +85,7 @@ dot1dBridge MODULE-IDENTITY
     DESCRIPTION
          "Initial revision, published as part of RFC 1286."
     ::= { mib-2 17 }
+
 
 -- ---------------------------------------------------------- --
 -- Textual Conventions
@@ -122,7 +140,6 @@ Timeout ::= TEXTUAL-CONVENTION
             ceiling = quotient [if remainder is 0], or
                       quotient + 1 [if remainder is nonzero]
             n is the value in 1/100 second units
-
             b is the value in 1/256 second units
 
         Note: it is important that the arithmetic operations are
@@ -162,6 +179,7 @@ dot1dConformance    OBJECT IDENTIFIER ::= { dot1dBridge 8 }
 -- ---------------------------------------------------------- --
 
 dot1dBaseBridgeAddress OBJECT-TYPE
+
     SYNTAX      MacAddress
     MAX-ACCESS  read-only
     STATUS      current
@@ -170,7 +188,6 @@ dot1dBaseBridgeAddress OBJECT-TYPE
         referred to in a unique fashion.  It is recommended
         that this be the numerically smallest MAC address of
         all ports that belong to this bridge.  However, it is only
-
         required to be unique.  When concatenated with
         dot1dStpPriority, a unique BridgeIdentifier is formed,
         which is used in the Spanning Tree Protocol."
@@ -223,6 +240,7 @@ dot1dBasePortEntry OBJECT-TYPE
     SYNTAX      Dot1dBasePortEntry
     MAX-ACCESS  not-accessible
     STATUS      current
+
     DESCRIPTION
         "A list of information for each port of the bridge."
     REFERENCE
@@ -314,7 +332,6 @@ dot1dBasePortMtuExceededDiscards OBJECT-TYPE
 -- implemented by those bridges that support the Spanning Tree
 -- Protocol.
 -- ---------------------------------------------------------- --
-
 dot1dStpProtocolSpecification OBJECT-TYPE
     SYNTAX      INTEGER {
                     unknown(1),
@@ -507,7 +524,6 @@ dot1dStpBridgeHelloTime OBJECT-TYPE
         bridge is acting as the root.  The granularity of this
         timer is specified by 802.1D-1998 to be 1 second.  An
         agent may return a badValue error if a set is attempted
-
         to a value that is not a whole number of seconds."
     REFERENCE
         "IEEE 802.1D-1998: clause 8.5.3.9"
@@ -556,7 +572,6 @@ dot1dStpPortEntry OBJECT-TYPE
 
 Dot1dStpPortEntry ::=
     SEQUENCE {
-
         dot1dStpPort
             Integer32,
         dot1dStpPortPriority
@@ -653,7 +668,6 @@ dot1dStpPortPathCost OBJECT-TYPE
         paths towards the spanning tree root which include
         this port.  802.1D-1998 recommends that the default
         value of this parameter be in inverse proportion to
-
         the speed of the attached LAN.
 
         New implementations should support dot1dStpPortPathCost32.
@@ -780,6 +794,7 @@ dot1dTpAgingTime OBJECT-TYPE
         "IEEE 802.1D-1998: clause 14.7.1.1.3"
     ::= { dot1dTp 2 }
 
+
 -- ---------------------------------------------------------- --
 --  The Forwarding Database for Transparent Bridges
 -- ---------------------------------------------------------- --
@@ -845,7 +860,6 @@ dot1dTpFdbPort OBJECT-TYPE
         corresponding value of dot1dTpFdbStatus is not
         learned(3)."
     ::= { dot1dTpFdbEntry 2 }
-
 dot1dTpFdbStatus OBJECT-TYPE
     SYNTAX      INTEGER {
                     other(1),
@@ -942,7 +956,6 @@ dot1dTpPortMaxInfo OBJECT-TYPE
     STATUS      current
     DESCRIPTION
         "The maximum size of the INFO (non-MAC) field that
-
         this port will receive or transmit."
     ::= { dot1dTpPortEntry 2 }
 
@@ -991,7 +1004,6 @@ dot1dTpPortInDiscards OBJECT-TYPE
     ::= { dot1dTpPortEntry 5 }
 
 -- ---------------------------------------------------------- --
-
 -- The Static (Destination-Address Filtering) Database
 -- ---------------------------------------------------------- --
 -- Implementation of this subtree is optional.
@@ -1136,7 +1148,6 @@ newRoot NOTIFICATION-TYPE
         "The newRoot trap indicates that the sending agent has
         become the new root of the Spanning Tree; the trap is
         sent by a bridge soon after its election as the new
-
         root, e.g., upon expiration of the Topology Change Timer,
         immediately subsequent to its election.  Implementation
         of this trap is optional."
@@ -1281,11 +1292,11 @@ dot1dTpBridgeGroup OBJECT-GROUP
 
 dot1dTpFdbGroup OBJECT-GROUP
     OBJECTS {
-
         dot1dTpFdbAddress,
         dot1dTpFdbPort,
         dot1dTpFdbStatus
     }
+
     STATUS      current
     DESCRIPTION
         "Filtering Database information for the Bridge."
@@ -1377,7 +1388,6 @@ bridgeCompliance1493 MODULE-COMPLIANCE
     GROUP   dot1dTpGroup
     DESCRIPTION
         "Implementation of this group is mandatory for bridges
-
         that support the transparent bridging mode.  A
         transparent or SRT bridge will implement this group."
 
@@ -1467,6 +1477,7 @@ bridgeCompliance4188 MODULE-COMPLIANCE
     GROUP dot1dNotificationGroup
     DESCRIPTION
         "Implementation of this group is optional."
+
     ::= { dot1dCompliances 2 }
 
 END

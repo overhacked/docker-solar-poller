@@ -1,0 +1,6 @@
+[submodule "zabbix-monitor/build/zabbix-monitor"] 
+  path = zabbix-monitor/build/zabbix-monitor 
+  url = git@github.com:overhacked/zabbix-monitor.git
+[submodule "micromdm/build"]
+	path = micromdm/build
+	url = git@github.com:overhacked/micromdm-docker.git
