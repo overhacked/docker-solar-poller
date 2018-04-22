@@ -4,3 +4,7 @@
 [submodule "micromdm/build"]
 	path = micromdm/build
 	url = git@github.com:overhacked/micromdm-docker.git
+[submodule "reposado/build"]
+	path = reposado/build
+	url = https://github.com/overhacked/docker-reposado.git
+	branch = uwsgi-nginx

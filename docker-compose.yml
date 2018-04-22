@@ -258,14 +258,15 @@ services:
     reposado:
         image: registry.sineya.org:5000/reposado
         build:
-            context: https://github.com/overhacked/docker-reposado.git#uwsgi-nginx
+            #context: https://github.com/overhacked/docker-reposado.git#uwsgi-nginx
+            context: reposado/build
         restart: always
         environment:
             - LOCALCATALOGURLBASE="https://updates.manyfoldfarm.com:443"
         volumes:
             - /storage/mac/swupdate/html:/reposado/html
             - /storage/mac/swupdate/metadata:/reposado/metadata
-            - ${CONFIG_ROOT:-.}/reposado/preferences.plist:/reposado/code/preferences.plist
+            - ${CONFIG_ROOT:-.}/reposado/conf/preferences.plist:/reposado/code/preferences.plist
     gitlist:
         image: davibe/gitlist-docker
         restart: always
