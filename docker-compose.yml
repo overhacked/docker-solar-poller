@@ -186,7 +186,7 @@ services:
             - ZS_DBPassword=otWocnv4fmeA3r
             - ZS_Timeout=18
             - ZS_StartDiscoverers=2
-            - ZS_StartPollers=8
+            - ZS_StartPollers=16
             - ZS_StartPollersUnreachable=4
             - ZS_StartIPMIPollers=1
             - ZS_StartPingers=3
