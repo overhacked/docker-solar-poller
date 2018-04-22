@@ -55,6 +55,7 @@ services:
         ports:
             - "${EXTERNAL_IP:-0.0.0.0}:53:53/udp"
             - "${EXTERNAL_IP:-0.0.0.0}:53:53"
+            - "${EXTERNAL_IP:-0.0.0.0}:8653:8653"
         volumes:
             - "${CONFIG_ROOT:-.}/bind-slave/conf/named.conf.local:/etc/bind/named.conf.local:ro"
             - "${CONFIG_ROOT:-.}/bind-slave/conf/named.conf.options:/etc/bind/named.conf.options:ro"
