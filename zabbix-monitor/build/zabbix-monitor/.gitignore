@@ -1,7 +1,0 @@
-bower_components
-dist
-node_modules
-.tmp
-.sass-cache
-app/scripts/config.js
-app/scripts/templates.js

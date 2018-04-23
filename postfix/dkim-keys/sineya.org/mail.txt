@@ -1,2 +1,0 @@
-mail._domainkey	IN	TXT	( "v=DKIM1; k=rsa; "
-	  "p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDcxQXS3H+sm93PvfxHiKv5Va1EEaCErvjdvAgt2vHL1DX8fGUt0CPKprEjsQS86iBqDK5XHAD1I3qZqi3rIDGePhoQSxHgy2YXoKoaL8EHS+8L7dmKmcQFEpkhZwGaa6TQtSMiJ3OiR0nZlfwCL5CcscbM/OE+mOWCWmNOBmj74wIDAQAB" )  ; ----- DKIM key mail for sineya.org

@@ -1,3 +1,0 @@
-location /fw/ {
-	alias /srv/data/unifi/;
-}
