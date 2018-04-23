@@ -1,0 +1,6 @@
+<section id="error" class="container">
+  <div class="alert alert-danger" role="alert">
+    <p><strong>Error</strong></p>
+    <p>{{= it.error.message }}</p>
+  </div>
+</section>
