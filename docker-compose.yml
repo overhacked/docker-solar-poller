@@ -1,5 +1,11 @@
 # vim: et:ts=4:sw=4
 version: '2.3'
+x-logging:
+    &default-logging
+    driver: gelf
+    options:
+        gelf-address: udp://50.207.215.130:12201
+
 services:
     registry:
         restart: always
@@ -7,45 +13,75 @@ services:
         ports:
             - 5000:5000
         environment:
-            REGISTRY_HTTP_TLS_CERTIFICATE: /certs/WILDCARD.sineya.org.bundle.crt
-            REGISTRY_HTTP_TLS_KEY: /certs/WILDCARD.sineya.org.key
+            VIRTUAL_HOST: registry.sineya.org
+            VIRTUAL_PORT: 5000
+            VIRTUAL_PROTO: https
+            REGISTRY_HTTP_TLS_CERTIFICATE: /certs/sineya.org.crt
+            REGISTRY_HTTP_TLS_KEY: /certs/sineya.org.key
             REGISTRY_AUTH: htpasswd
             REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
             REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
         volumes:
             - /storage/data/docker-registry:/var/lib/registry
-            - "${CONFIG_ROOT:-.}/nginx/ssl:/certs:ro"
-            - "${CONFIG_ROOT:-.}/nginx/htpasswd:/auth/htpasswd:ro"
+            - "${CONFIG_ROOT:-.}/nginx-proxy/conf/certs/sineya.org.crt:/certs/sineya.org.crt:ro"
+            - "${CONFIG_ROOT:-.}/nginx-proxy/conf/certs/sineya.org.key:/certs/sineya.org.key:ro"
+            - "${CONFIG_ROOT:-.}/nginx-proxy/conf/htpasswd/default:/auth/htpasswd:ro"
     frontend:
         image: nginx:mainline-alpine
         restart: always
+        labels:
+            - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
         ports:
             - "80:80"
             - "443:443"
+        environment:
+            ENABLE_IPV6: "true"
+            #DEFAULT_HOST: zee.edge.manyfoldfarm.com
+            SSL_POLICY: Mozilla-Modern
+            #VIRTUAL_ROOT: /srv
         volumes:
-            - "${CONFIG_ROOT:-.}/nginx/ssl:/etc/nginx/ssl:ro"
-            - "${CONFIG_ROOT:-.}/nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
-            - "${CONFIG_ROOT:-.}/nginx/conf.d:/etc/nginx/conf.d:ro"
-            - "${CONFIG_ROOT:-.}/nginx/htpasswd:/etc/nginx/htpasswd:ro"
+            - "${CONFIG_ROOT:-.}/nginx-proxy/conf/vhost.d:/etc/nginx/vhost.d:ro"
+            - "${CONFIG_ROOT:-.}/nginx-proxy/conf/htpasswd:/etc/nginx/htpasswd:ro"
+            - "${CONFIG_ROOT:-.}/nginx-proxy/conf/certs:/etc/nginx/certs:ro"
+            - "${CONFIG_ROOT:-.}/nginx-proxy/conf/network_internal.conf:/etc/nginx/network_internal.conf:ro"
+            # Shared volume for docker-gen
+            - /etc/nginx/conf.d
+            # Static files served under VIRTUAL_ROOT
             - "/storage/mac/munki_repo:/srv/munki_repo:ro"
-            - "${CONFIG_ROOT:-.}/wpad:/srv/wpad:ro"
             - "/storage/data/httpd:/srv/data"
-            - "/storage/backup/tcpdump:/tcpdump:rw"
-            - "/var/cache/nginx"
-        logging:
-            driver: gelf
-            options:
-                gelf-address: ${GELF_TARGET}
+            # static files for LetsEncrypt challenges
+            - /usr/share/nginx/html
+#        logging: *default-logging
         networks:
             default:
                 ipv4_address: 172.16.243.254
                 ipv6_address: 2001:559:80e5:d0:cc::fe
+    dockergen:
+        image: jwilder/docker-gen
+        labels:
+            - com.github.jrcs.letsencrypt_nginx_proxy_companion.docker_gen
+        command: -endpoint unix:///var/run/docker.sock -notify-sighup docker_frontend_1 -watch -wait 5s:30s /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
+        volumes_from:
+            - frontend
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - "${CONFIG_ROOT:-.}/nginx-proxy/conf/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro"
+    letsencrypt:
+        image: jrcs/letsencrypt-nginx-proxy-companion
+        volumes_from:
+            - frontend
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - "${CONFIG_ROOT:-.}/nginx-proxy/conf/certs:/etc/nginx/certs:rw"
+            - "${CONFIG_ROOT:-.}/nginx-proxy/conf/vhost.d:/etc/nginx/vhost.d:rw"
     browsepy:
         image: blankdots/docker-browsepy
         restart: always
         volumes:
             - /mnt/media:/files
         environment:
+            VIRTUAL_HOST: files.sineya.org
+            NETWORK_ACCESS: internal
             GOSU_USER: nobody:nobody
             GOSU_CHOWN: ""
     bind:
@@ -59,10 +95,7 @@ services:
         volumes:
             - "${CONFIG_ROOT:-.}/bind-slave/conf/named.conf.local:/etc/bind/named.conf.local:ro"
             - "${CONFIG_ROOT:-.}/bind-slave/conf/named.conf.options:/etc/bind/named.conf.options:ro"
-        logging:
-            driver: gelf
-            options:
-                gelf-address: ${GELF_TARGET}
+        logging: *default-logging
         networks:
             default:
                 ipv4_address: 172.16.243.250
@@ -91,10 +124,7 @@ services:
             POSTFIX_smtpd_tls_cert_file: /etc/postfix/ssl/server.crt
             POSTFIX_smtpd_tls_key_file: /etc/postfix/ssl/server.key
             OPENDKIM_DOMAINS: manyfoldfarm.com sineya.org
-        logging:
-            driver: gelf
-            options:
-                gelf-address: ${GELF_TARGET}
+        logging: *default-logging
         networks:
             rackvlan:
                 ipv4_address: 50.207.215.133
@@ -114,16 +144,18 @@ services:
             args:
                 UNIFI_VERSION: 5.6.30
         restart: always
+        environment:
+            VIRTUAL_HOST: unifi.sineya.org
+            VIRTUAL_PORT: 8443
+            VIRTUAL_PROTO: https
+            NETWORK_ACCESS: internal
         ports:
             - "8080:8080" # INFORM
             - "3478:3478/udp" # STUN
         volumes:
             - /storage/data/unifi:/usr/lib/unifi/data
         cpu_shares: 512
-        logging:
-            driver: gelf
-            options:
-                gelf-address: ${GELF_TARGET}
+        logging: *default-logging
 #    transmission:
 #        image: registry.sineya.org:5000/transmission-openvpn
 #        build: https://github.com/overhacked/docker-transmission-openvpn.git#overhacked
@@ -140,6 +172,9 @@ services:
 #            - "/storage/export/downloads:/data"
 #            - "/etc/localtime:/etc/localtime:ro"
 #        environment:
+#            - VIRTUAL_HOST=torrents.docker.farm.manyfoldfarm.com
+#            - VIRTUAL_PORT=9091
+#            - NETWORK_ACCESS=internal
 #            - OPENVPN_PROVIDER=PIA
 #            - OPENVPN_USERNAME=p4995968
 #            - OPENVPN_PASSWORD=JsJTPa9nFY
@@ -160,10 +195,7 @@ services:
         environment:
             - MARIADB_USER=zabbix
             - MARIADB_PASS=otWocnv4fmeA3r
-        logging:
-            driver: gelf
-            options:
-                gelf-address: ${GELF_TARGET}
+        logging: *default-logging
     zabbix-server:
         image: monitoringartist/dockbix-xxl:3.4.7
         restart: always
@@ -181,6 +213,7 @@ services:
             - ${CONFIG_ROOT:-.}/zabbix/etc/nginx/hosts.d/default.conf:/etc/nginx/hosts.d/default.conf:ro
             - "/storage/backup/tcpdump:/tcpdump:rw"
         environment:
+            - VIRTUAL_HOST=mon.sineya.org
             - ZS_DBHost=zabbix-db
             - ZS_DBUser=zabbix
             - ZS_DBPassword=otWocnv4fmeA3r
@@ -201,10 +234,7 @@ services:
             - "XXL_grapher=true"
             - "XXL_searcher=false"
             - "XXL_analytics=false"
-        logging:
-            driver: gelf
-            options:
-                gelf-address: ${GELF_TARGET}
+        logging: *default-logging
         networks:
             default:
                 ipv4_address: 172.16.243.251
@@ -216,6 +246,9 @@ services:
             args:
                 ZM_GIT_REPO: https://github.com/overhacked/zabbix-monitor.git
                 ZM_GIT_BRANCH: overhacked
+        environment:
+            VIRTUAL_HOST: dashboard.sineya.org
+            VIRTUAL_PORT: 8080
         restart: always
     zabbix-infinias:
         image: registry.sineya.org:5000/iaevents-listener:latest
@@ -263,7 +296,12 @@ services:
             context: reposado/build
         restart: always
         environment:
-            - LOCALCATALOGURLBASE="https://updates.manyfoldfarm.com:443"
+            LOCALCATALOGURLBASE: "https://updates.manyfoldfarm.com:443"
+            VIRTUAL_HOST: updates.manyfoldfarm.com 
+            LETSENCRYPT_HOST: updates.manyfoldfarm.com
+            LETSENCRYPT_EMAIL: hostmaster@manyfoldfarm.com
+            VIRTUAL_PORT: 8088
+#NETWORK_ACCESS: internal
         volumes:
             - /storage/mac/swupdate/html:/reposado/html
             - /storage/mac/swupdate/metadata:/reposado/metadata
@@ -271,8 +309,13 @@ services:
     gitlist:
         image: davibe/gitlist-docker
         restart: always
+        expose:
+            # Have to do this, because the Dockerfile doesn't EXPOSE
+            - 80
         volumes:
             - /storage/repos:/repos
+        environment:
+            VIRTUAL_HOST: repos.docker.farm.manyfoldfarm.com
 #    nfsen:
 #        build: ./nfsen/build
 #        image: registry.sineya.org:5000/nfsen:latest
@@ -282,26 +325,26 @@ services:
 #        environment:
 #            TZ: America/New_York
 #            LOGLEVEL: 6
+#            VIRTUAL_HOST: nfsen.docker.farm.manyfoldfarm.com
+#            NETWORK_ACCESS: internal
 #        volumes:
 #            - "/storage/data/nfsen/profiles-data:/data/nfsen/profiles-data:rw"
 #            - "/storage/stat/nfsen/profiles-stat:/stat/nfsen/profiles-stat:rw"
-#        logging:
-#            driver: gelf
-#            options:
-#                gelf-address: ${GELF_TARGET}
+#        logging: *default-logging
 #    ntop:
 #        build: ./ntopng/build
 #        image: registry.sineya.org:5000/ntopng-nprobe:latest
 #        restart: always
+#        environment:
+#           VIRTUAL_HOST: ntop.docker.farm.manyfoldfarm.com
+#           VIRTUAL_PORT: 3000
+#           NETWORK_ACCESS: internal
 #        ports:
 #            - "2055:2055/udp"
 #        volumes:
 #            - "${CONFIG_ROOT:-.}/ntopng/conf:/etc/ntopng:ro"
 #            - "${CONFIG_ROOT:-.}/ntopng/data:/var/lib/redis:rw"
-#        logging:
-#            driver: gelf
-#            options:
-#                gelf-address: ${GELF_TARGET}
+#        logging: *default-logging
     mongo-db:
         image: "mongo:3.4.4"
         # Keep the cache size very low, because this is mostly a write-only DB
@@ -338,7 +381,9 @@ services:
             #- /storage/data/graylog/plugin/graylog-plugin-netflow-0.1.1.jar:/usr/share/graylog/plugin/graylog-plugin-netflow-0.1.1.jar:ro
         mem_limit: 6g
         environment:
-            - GRAYLOG_SERVER_JAVA_OPTS=-Xmx4096m
+            GRAYLOG_SERVER_JAVA_OPTS: -Xmx4096m
+            VIRTUAL_HOST: logs.sineya.org,graylog.docker.farm.manyfoldfarm.com
+            VIRTUAL_PORT: 9000
         links:
             - mongo-db:mongo
             - elasticsearch-graylog:elasticsearch
@@ -359,6 +404,8 @@ services:
 #            MM_SERVER_TLS: "false"
 #            MM_SERVER_URL: "https://mdm.sineya.org"
 #            MM_SERVER_DEBUG: "true"
+#            VIRTUAL_HOST: mdm.sineya.org
+#            VIRTUAL_PORT: 8080
 #        volumes:
 #            - /storage/conf/docker/micromdm/conf:/conf:ro
 #            - /storage/data/micromdm/db:/var/db/micromdm
