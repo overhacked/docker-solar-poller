@@ -331,20 +331,6 @@ services:
 #            - "/storage/data/nfsen/profiles-data:/data/nfsen/profiles-data:rw"
 #            - "/storage/stat/nfsen/profiles-stat:/stat/nfsen/profiles-stat:rw"
 #        logging: *default-logging
-#    ntop:
-#        build: ./ntopng/build
-#        image: registry.sineya.org:5000/ntopng-nprobe:latest
-#        restart: always
-#        environment:
-#           VIRTUAL_HOST: ntop.docker.farm.manyfoldfarm.com
-#           VIRTUAL_PORT: 3000
-#           NETWORK_ACCESS: internal
-#        ports:
-#            - "2055:2055/udp"
-#        volumes:
-#            - "${CONFIG_ROOT:-.}/ntopng/conf:/etc/ntopng:ro"
-#            - "${CONFIG_ROOT:-.}/ntopng/data:/var/lib/redis:rw"
-#        logging: *default-logging
     mongo-db:
         image: "mongo:3.4.4"
         # Keep the cache size very low, because this is mostly a write-only DB
